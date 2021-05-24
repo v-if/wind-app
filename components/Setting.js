@@ -1,37 +1,34 @@
 import React, { useEffect, useState } from 'react';
-import { ActivityIndicator, FlatList, Text, View, StyleSheet } from 'react-native';
+import { TouchableOpacity, FlatList, Text, View, StyleSheet } from 'react-native';
 
 export default function Setting({ navigation }) {
-  const [isLoading, setLoading] = useState(true);
-  const [data, setData] = useState([]);
-
-  useEffect(() => {
-    fetch('https://reactnative.dev/movies.json')
-      .then((response) => response.json())
-      .then((json) => setData(json.movies))
-      .catch((error) => console.error(error))
-      .finally(() => setLoading(false));
-  }, []);
-
   return (
-    <View style={{ flex: 1, padding: 24 }}>
-      {isLoading ? <ActivityIndicator/> : (
-        <FlatList
-          data={data}
-          keyExtractor={({ id }, index) => id}
-          renderItem={({ item }) => (
-            <Text>{item.title}, {item.releaseYear}</Text>
-          )}
-        />
-      )}
+    <View style={styles.container}>
+      <FlatList
+        data={[
+          {key: 'About', title: 'About'},
+          {key: 'Feedback', title: '피드백 보내기'},
+          {key: 'Dominic', title: '앱 평점주기 / 리뷰'},
+          {key: 'Jackson', title: '개발자 소개'},
+          {key: 'James', title: '사용 라이브러리'},
+        ]}
+        renderItem={({item}) => 
+        <TouchableOpacity onPress={() => navigation.navigate(item.key)}>
+          <Text style={styles.item}>{item.title}</Text>
+        </TouchableOpacity>
+      }
+      />
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  itemCode: {
-    fontWeight: '600',
-    fontSize: 12,
-    color: '#fff',
-  },
+  container: {
+    flex: 1,
+   },
+   item: {
+     padding: 10,
+     fontSize: 18,
+     height: 44,
+   },
 });

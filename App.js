@@ -9,6 +9,8 @@ import {
   Content,
   WindMap,
   Setting,
+  About,
+  Feedback,
 } from './components';
 
 const Stack = createStackNavigator();
@@ -74,7 +76,39 @@ export default class example extends Component {
               },
             })}
           />
-          <Stack.Screen name="Setting" component={Setting} />
+          <Stack.Screen 
+            name="Setting" 
+            component={Setting}
+            options={({ navigation, route }) => ({
+              headerStyle: styles.header,
+              headerTintColor: Colors.lighter,
+              headerTitleStyle: {
+                fontWeight: 'bold',
+              },
+            })}
+          />
+          <Stack.Screen 
+            name="About" 
+            component={About}
+            options={({ navigation, route }) => ({
+              headerStyle: styles.header,
+              headerTintColor: Colors.lighter,
+              headerTitleStyle: {
+                fontWeight: 'bold',
+              },
+            })}
+          />
+          <Stack.Screen 
+            name="Feedback" 
+            component={Feedback}
+            options={({ navigation, route }) => ({
+              headerStyle: styles.header,
+              headerTintColor: Colors.lighter,
+              headerTitleStyle: {
+                fontWeight: 'bold',
+              },
+            })}
+          />
         </Stack.Navigator>
       </NavigationContainer>
     )
@@ -83,7 +117,7 @@ export default class example extends Component {
 
 const styles = StyleSheet.create({
   header: {
-    backgroundColor: Colors.carrot,
+    backgroundColor: Colors.peter_river,
   },
   title: {
     fontWeight: '600',

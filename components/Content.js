@@ -27,7 +27,7 @@ export default function Content({ navigation }) {
         spacing={10}
         renderItem={({ item }) => (
           <TouchableOpacity 
-            style={[styles.itemContainer, { backgroundColor: Colors.carrot }]}
+            style={[styles.itemContainer, { backgroundColor: Colors.clouds }]}
             onPress={() => navigation.navigate('Map', {
               road: item.road,
               roadNm: item.roadNm
@@ -55,12 +55,7 @@ const styles = StyleSheet.create({
   },
   itemName: {
     fontSize: 16,
-    color: '#fff',
+    color: Colors.peter_river,
     fontWeight: '600',
-  },
-  itemCode: {
-    fontWeight: '600',
-    fontSize: 12,
-    color: '#fff',
   },
 });
