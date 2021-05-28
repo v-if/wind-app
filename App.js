@@ -8,9 +8,11 @@ import {
   Colors,
   Content,
   WindMap,
+  Map,
   Setting,
   About,
   Feedback,
+  AppStore,
 } from './components';
 
 const Stack = createStackNavigator();
@@ -66,7 +68,7 @@ export default class example extends Component {
           />
           <Stack.Screen 
             name="Map" 
-            component={WindMap} 
+            component={Map} 
             options={({ navigation, route }) => ({
               title: '',
               headerStyle: styles.header,

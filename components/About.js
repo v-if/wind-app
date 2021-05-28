@@ -12,7 +12,7 @@ export default function About({ navigation }) {
     <View style={styles.container}>
       <Image
         style={{width: width, height: 420}}
-        source={require('./about.png')}
+        source={require('./images/about.png')}
       />
       <Text>이 앱은 라이더들을 위해 만들어졌습니다.</Text>
       <Text>이 앱이 마음에 드시면, 마켓에서 평가, </Text>

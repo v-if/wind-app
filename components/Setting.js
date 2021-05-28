@@ -8,7 +8,7 @@ export default function Setting({ navigation }) {
         data={[
           {key: 'About', title: 'About'},
           {key: 'Feedback', title: '피드백 보내기'},
-          {key: 'Dominic', title: '앱 평점주기 / 리뷰'},
+          {key: 'AppStore', title: '앱 평점주기 / 리뷰'},
           {key: 'Jackson', title: '개발자 소개'},
           {key: 'James', title: '사용 라이브러리'},
         ]}
