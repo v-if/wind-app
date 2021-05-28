@@ -6,7 +6,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import {
   Colors,
-  Content,
+  Home,
   WindMap,
   Map,
   Setting,
@@ -31,7 +31,7 @@ export default class example extends Component {
         <Stack.Navigator initialRouteName="Home">
           <Stack.Screen 
             name="Home" 
-            component={Content} 
+            component={Home} 
             options={({ navigation, route }) => ({
               title: '',
               headerStyle: styles.header,

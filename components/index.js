@@ -1,7 +1,7 @@
 'use strict';
 
 import Colors from './Colors';
-import Content from './Content';
+import Home from './Home';
 import WindMap from './WindMap';
 import Map from './Map';
 import Setting from './Setting';
@@ -11,7 +11,7 @@ import AppStore from './AppStore';
 
 export {
   Colors,
-  Content,
+  Home,
   WindMap,
   Map,
   Setting,

@@ -30,7 +30,9 @@ export default function Home({ navigation }) {
             style={[styles.itemContainer, { backgroundColor: Colors.clouds }]}
             onPress={() => navigation.navigate('Map', {
               road: item.road,
-              roadNm: item.roadNm
+              roadNm: item.roadNm,
+              latitude: item.latitude,
+              longitude: item.longitude
             })}
           >
             <Text style={styles.itemName}>{item.roadNm}</Text>
