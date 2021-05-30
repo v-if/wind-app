@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { ActivityIndicator, TouchableOpacity, Text, View, StyleSheet } from 'react-native';
+import { ActivityIndicator, TouchableOpacity, Text, View, Image, StyleSheet } from 'react-native';
 import Colors from './Colors';
 import { FlatGrid } from 'react-native-super-grid';
 
@@ -35,7 +35,15 @@ export default function Home({ navigation }) {
               longitude: item.longitude
             })}
           >
-            <Text style={styles.itemName}>{item.roadNm}</Text>
+            <View style={styles.item}>
+              <View style={styles.preview}>
+                <Image
+                  style={styles.preview}
+                  source={{ uri: "http://118.67.129.162/images/" + item.road }}
+                />
+              </View>
+              <Text style={styles.itemName}>{item.roadNm}</Text>
+            </View>
           </TouchableOpacity>
         )}
       />
@@ -50,14 +58,22 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   itemContainer: {
-    justifyContent: 'flex-end',
     borderRadius: 5,
     padding: 10,
     height: 200,
+  },
+  item: {
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   itemName: {
     fontSize: 16,
     color: Colors.peter_river,
     fontWeight: '600',
+  },
+  preview: {
+    width: 150,
+    height: 150,
+    backgroundColor: Colors.silver,
   },
 });

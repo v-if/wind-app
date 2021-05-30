@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { ActivityIndicator, Picker, Text, TextInput, View, StyleSheet, Button, Alert } from 'react-native';
+import { ActivityIndicator, Text, TextInput, View, StyleSheet, Button, Alert } from 'react-native';
+import { RadioButton } from 'react-native-paper';
 import Colors from './Colors';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 
 export default function Feedback({ navigation }) {
-  const [selectedValue, setSelectedValue] = useState("request");
+  const [value, setValue] = React.useState('문의');
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [content, setContent] = useState("");
@@ -19,7 +20,7 @@ export default function Feedback({ navigation }) {
 
   const apiWrite = () => {
     let data = {
-      boardTp: selectedValue,
+      boardTp: value,
       name: name,
       email: email,
       content: content
@@ -48,14 +49,14 @@ export default function Feedback({ navigation }) {
     <KeyboardAwareScrollView style={styles.container}>
       <View>
         <View style={styles.row}>
-          <Picker
-            selectedValue={selectedValue}
-            style={styles.picker}
-            onValueChange={(itemValue, itemIndex) => setSelectedValue(itemValue)}
-          >
-            <Picker.Item label="요청하기" value="request" />
-            <Picker.Item label="문의하기" value="question" />
-          </Picker>
+          <RadioButton.Group onValueChange={newValue => setValue(newValue)} value={value}>
+            <View style={styles.row}>
+              <Text>문의하기</Text>
+              <RadioButton value="문의" />
+              <Text>요청하기</Text>
+              <RadioButton value="요청" />
+            </View>
+          </RadioButton.Group>
         </View>
         <View style={styles.row}>
           <Text style={styles.label}>이름</Text>
