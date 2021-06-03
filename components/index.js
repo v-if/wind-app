@@ -3,7 +3,8 @@
 import Colors from './Colors';
 import Home from './Home';
 import WindMap from './WindMap';
-import Map from './Map';
+import Map from './Map2';
+import MapRegion from './MapRegion';
 import Setting from './Setting';
 import About from './About';
 import Feedback from './Feedback';
@@ -14,6 +15,7 @@ export {
   Home,
   WindMap,
   Map,
+  MapRegion,
   Setting,
   About,
   Feedback,

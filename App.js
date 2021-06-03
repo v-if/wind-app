@@ -9,6 +9,7 @@ import {
   Home,
   WindMap,
   Map,
+  MapRegion,
   Setting,
   About,
   Feedback,

@@ -8,7 +8,8 @@ export default function Home({ navigation }) {
   const [data, setData] = useState([]);
 
   useEffect(() => {
-    fetch('http://118.67.129.162/api/wind/road')
+    let url = 'http://118.67.129.162/api/wind/road'
+    fetch(url)
       .then((response) => response.json())
       .then((json) => setData(json.response))
       .catch((error) => console.error(error))

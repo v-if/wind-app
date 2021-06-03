@@ -9,11 +9,12 @@ export default function Map({ navigation, route }) {
   const { road, roadNm, latitude, longitude } = route.params;
 
   useEffect(() => {
-    fetch('http://118.67.129.162/api/wind')
+    let url = 'http://118.67.129.162/api/wind'
+    fetch(url)
       .then((response) => response.json())
       .then((json) => setData(json.response))
       .catch((error) => console.error(error))
-      .finally(() => console.log('end /api/wind'));
+      .finally(() => console.log('end '+url));
   }, []);
 
   navigation.setOptions({ title: roadNm })
@@ -30,6 +31,7 @@ export default function Map({ navigation, route }) {
     >
       {data.map(marker => {
         return <Marker
+                key={marker.nx+"_"+marker.ny}
                 coordinate={{latitude: parseFloat(marker.latitude), longitude: parseFloat(marker.longitude)}}
                 title={"lat:"+marker.latitude+", lon:"+marker.longitude}
                 description={"nx:"+marker.nx+", ny:"+marker.ny}
