@@ -1,15 +1,12 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
-import { StyleSheet, View, Text, Image, Dimensions } from 'react-native';
-import Icon from 'react-native-vector-icons/Feather';
+import { TouchableOpacity, StyleSheet, View, Text, Image, Dimensions } from 'react-native';
 import Colors from './Colors';
 import MapView, {
-  PROVIDER_GOOGLE,
   Marker,
   ProviderPropType,
   Callout,
 } from 'react-native-maps';
-import { getDistance } from 'geolib';
 
 const { width, height } = Dimensions.get('window');
 
@@ -172,6 +169,79 @@ WindMarker.propTypes = {
   info: PropTypes.object,
 };
 
+class RainMarker extends React.Component {
+
+  getPty(val) {
+    let state = ''
+
+    if(val == '0') {
+      state = '없음'
+    } else if(val == '1') {
+      state = '비'
+    } else if(val == '2') {
+      state = '비/눈'
+    } else if(val == '3') {
+      state = '눈'
+    } else if(val == '4') {
+      state = '소나기'
+    } else if(val == '5') {
+      state = '빗방울'
+    } else if(val == '6') {
+      state = '빗방울/눈날림'
+    } else if(val == '7') {
+      state = '눈날림'
+    }
+    return state
+  }
+
+  getRn1(val) {
+    let state = ''
+    let n = parseFloat(val)
+
+    if(n < 0.1) {
+      state = '0mm'
+    } else if(n >= 0.1 && n < 1.0) {
+      state = '1mm미만'
+    } else if(n >= 1.0 && n < 5.0) {
+      state = '1~4mm'
+    } else if(n >= 5.0 && n < 10.0) {
+      state = '5~9mm'
+    } else if(n >= 10.0 && n < 20.0) {
+      state = '10~19mm'
+    } else if(n >= 20.0 && n < 40.0) {
+      state = '20~39mm'
+    } else if(n >= 40.0 && n < 70.0) {
+      state = '40~69mm'
+    } else if(n >= 70.0) {
+      state = '70mm이상'
+    }
+    return state
+  }
+
+  render() {
+    const { info } = this.props;
+
+    return (
+      <View style={styles.markerWrap}>
+        <View style={styles.markerWrapItem}>
+        <Text>{this.getPty(info.pty)}({this.getRn1(info.rn1)})</Text>
+          <Text>강수량</Text>
+        </View>
+        <View style={styles.markerWrapItem}>
+          <Image
+            style={{width: 40, height: 40}}
+            source={require('./images/rain.png')}
+          />
+        </View>
+      </View>
+    );
+  }
+}
+
+RainMarker.propTypes = {
+  info: PropTypes.object,
+};
+
 class Map extends Component {
   constructor(props) {
     super(props);
@@ -185,46 +255,13 @@ class Map extends Component {
       },
       events: [],
       data: [],
+      tp: 'wind',
     };
   }
 
-  makeEvent(e, name) {
-    return {
-      id: id++,
-      name,
-      data: e.nativeEvent ? e.nativeEvent : e,
-    };
-  }
-
-  recordEvent(name) {
-    return e => {
-      if (e.persist) {
-        e.persist(); // Avoids warnings relating to https://fb.me/react-event-pooling
-      }
-      if(name == 'Map::onRegionChangeComplete') {
-        //console.log('onRegionChangeComplete latitude %o:',e.latitude)
-        //console.log('onRegionChangeComplete longitude %o:',e.longitude)
-        this.setState({region: {latitude: e.latitude, longitude: e.longitude, latitudeDelta: LATITUDE_DELTA, longitudeDelta: LATITUDE_DELTA * ASPECT_RATIO}})
-
-        //console.log('current latitude:'+this.state.region.latitude)
-        //console.log('current longitude:'+this.state.region.longitude)
-
-        //console.log('this.state.region %o:',this.state.region)
-        //console.log('this.state.events %o:',this.state.events)
-        //console.log('this.state.data %o:',this.state.data)
-      } else if(name == 'Callout::onPress') {
-        console.log('onPress')
-      }
-    };
-  }
-
-  componentDidMount() {
-    const { navigation, route } = this.props;
-    const { road, roadNm, latitude, longitude } = route.params;
-    navigation.setOptions({ title: roadNm })
-    this.setState({region: {latitude: parseFloat(latitude), longitude: parseFloat(longitude), latitudeDelta: LATITUDE_DELTA, longitudeDelta: LATITUDE_DELTA * ASPECT_RATIO}})
-
-    let url = 'http://118.67.129.162/api/wind'
+  apiWindData(latitude, longitude) {
+    let url = 'http://118.67.129.162/api/wind/data/'+latitude+'/'+longitude // dev
+    //let url = 'http://10.190.10.77:5000/api/wind/data/'+latitude+'/'+longitude // local
     fetch(url)
       .then((response) => response.json())
       .then((json) => this.setState({data: json.response}))
@@ -232,48 +269,78 @@ class Map extends Component {
       .finally(() => console.log('end '+url));
   }
 
-  calculateDistance(origLat, origLon, markerLat, markerLon) {
-    // https://stackoverflow.com/a/54915489
-    return getDistance({latitude: origLat, longitude: origLon},
-                      {latitude: markerLat, longitude: markerLon})
+  onWindButtonPress = () => {
+    this.setState({tp: 'wind'})
+  }
+
+  onRainButtonPress = () => {
+    this.setState({tp: 'rain'})
+  }
+
+  onRegionChangeComplete = (region) => {
+    console.log("onRegionChangeComplete.. lat:"+region.latitude+", lon:"+region.longitude)
+    this.apiWindData(region.latitude, region.longitude)
+  }
+
+  componentDidMount() {
+    const { navigation, route } = this.props;
+    const { roadNm, tp } = route.params;
+    navigation.setOptions({ title: roadNm })
+
+    this.setState({tp: tp})
   }
 
   render() {
-    // Events that are dependent on
-    let googleProviderProps = {};
-    if (this.props.provider === PROVIDER_GOOGLE) {
-      googleProviderProps = {
-        onUserLocationChange: this.recordEvent('Map::onUserLocationChange'),
-      };
-    }
+    const { route } = this.props;
+    const { latitude, longitude } = route.params;
+
+    let region = {
+      latitude: parseFloat(latitude),
+      longitude: parseFloat(longitude),
+      latitudeDelta: LATITUDE_DELTA,
+      longitudeDelta: LONGITUDE_DELTA,
+    };
 
     return (
       <View style={styles.container}>
         <MapView 
           provider={this.props.provider}
           style={styles.container}
-          initialRegion={this.state.region}
-          showsUserLocation
-          showsMyLocationButton
-          onRegionChange={this.recordEvent('Map::onRegionChange')}
-          onRegionChangeComplete={this.recordEvent('Map::onRegionChangeComplete')}
+          initialRegion={region}
+          onRegionChangeComplete={this.onRegionChangeComplete}
         >
         {this.state.data.map(marker => {
           return <Marker
               key={marker.id}
               info={marker}
+              tracksViewChanges={false}
               coordinate={{latitude: parseFloat(marker.latitude), longitude: parseFloat(marker.longitude)}}
               title={"lat:"+marker.latitude+", lon:"+marker.longitude}
               description={"nx:"+marker.nx+", ny:"+marker.ny}
             >
-              <WindMarker key={'marker'+marker.id} info={marker} />
+              {this.state.tp == 'wind' ? <WindMarker key={'wind_'+marker.id} info={marker} /> : <RainMarker key={'rain_'+marker.id} info={marker} />}
               <WindCallout key={'callout'+marker.id} info={marker} />
             </Marker>
-        }).filter(marker => {
-          let distance = this.calculateDistance(this.state.region.latitude, this.state.region.longitude, marker.props.info.latitude, marker.props.info.longitude)
-          return distance <= 2500 // 2.5km
         })}
         </MapView>
+        <View style={styles.buttonContainer}>
+          <TouchableOpacity
+            style={styles.bubble}
+            onPress={this.onWindButtonPress}
+          >
+            <View>
+              <Text>바람</Text>
+            </View>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.bubble}
+            onPress={this.onRainButtonPress}
+          >
+            <View>
+              <Text>강수</Text>
+            </View>
+          </TouchableOpacity>
+        </View>
       </View>
     );
   }
@@ -289,8 +356,8 @@ const styles = StyleSheet.create({
   },
   container: {
     ...StyleSheet.absoluteFillObject,
-    justifyContent: 'flex-end',
-    alignItems: 'center',
+    alignItems: 'flex-end',
+    justifyContent: 'flex-start',
   },
   markerWrap: {
     width: 140,
@@ -304,6 +371,22 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  buttonContainer: {
+    width: 100,
+    height: 100,
+    backgroundColor: 'transparent',
+    margin: 10,
+    flexDirection: 'column',
+    alignItems: 'flex-end',
+    justifyContent: 'flex-end',
+  },
+  bubble: {
+    flex: 1,
+    backgroundColor: 'rgba(255,255,255,0.7)',
+    paddingHorizontal: 18,
+    paddingVertical: 12,
+    borderRadius: 10,
   },
 });
 

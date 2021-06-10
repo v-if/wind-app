@@ -33,7 +33,8 @@ export default function Home({ navigation }) {
               road: item.road,
               roadNm: item.roadNm,
               latitude: item.latitude,
-              longitude: item.longitude
+              longitude: item.longitude,
+              tp: 'wind'
             })}
           >
             <View style={styles.item}>
