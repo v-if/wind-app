@@ -17,70 +17,70 @@ const LATITUDE_DELTA = 0.0622;
 const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
 let id = 0;
 
+function getPty(val) {
+  let state = ''
+
+  if(val == '0') {
+    state = '없음'
+  } else if(val == '1') {
+    state = '비'
+  } else if(val == '2') {
+    state = '비/눈'
+  } else if(val == '3') {
+    state = '눈'
+  } else if(val == '4') {
+    state = '소나기'
+  } else if(val == '5') {
+    state = '빗방울'
+  } else if(val == '6') {
+    state = '빗방울/눈날림'
+  } else if(val == '7') {
+    state = '눈날림'
+  }
+  return state
+}
+
+function getRn1(val) {
+  let state = ''
+  let n = parseFloat(val)
+
+  if(n < 0.1) {
+    state = '0mm'
+  } else if(n >= 0.1 && n < 1.0) {
+    state = '1mm미만'
+  } else if(n >= 1.0 && n < 5.0) {
+    state = '1~4mm'
+  } else if(n >= 5.0 && n < 10.0) {
+    state = '5~9mm'
+  } else if(n >= 10.0 && n < 20.0) {
+    state = '10~19mm'
+  } else if(n >= 20.0 && n < 40.0) {
+    state = '20~39mm'
+  } else if(n >= 40.0 && n < 70.0) {
+    state = '40~69mm'
+  } else if(n >= 70.0) {
+    state = '70mm이상'
+  }
+  return state
+}
+
+function getWsd(val) {
+  let state = ''
+  let n = parseFloat(val)
+
+  if(n < 4.0) {
+    state = '바람이 약하다'
+  } else if(n >= 4.0 && n < 9.0) {
+    state = '바람이 약간 강하다'
+  } else if(n >= 9.0 && n < 14.0) {
+    state = '바람이 강하다'
+  } else if(n >= 14.0) {
+    state = '바람이 매우 강하다'
+  }
+  return state
+}
+
 class WindCallout extends React.Component {
-
-  getPty(val) {
-    let state = ''
-
-    if(val == '0') {
-      state = '없음'
-    } else if(val == '1') {
-      state = '비'
-    } else if(val == '2') {
-      state = '비/눈'
-    } else if(val == '3') {
-      state = '눈'
-    } else if(val == '4') {
-      state = '소나기'
-    } else if(val == '5') {
-      state = '빗방울'
-    } else if(val == '6') {
-      state = '빗방울/눈날림'
-    } else if(val == '7') {
-      state = '눈날림'
-    }
-    return state
-  }
-
-  getRn1(val) {
-    let state = ''
-    let n = parseFloat(val)
-
-    if(n < 0.1) {
-      state = '0mm'
-    } else if(n >= 0.1 && n < 1.0) {
-      state = '1mm미만'
-    } else if(n >= 1.0 && n < 5.0) {
-      state = '1~4mm'
-    } else if(n >= 5.0 && n < 10.0) {
-      state = '5~9mm'
-    } else if(n >= 10.0 && n < 20.0) {
-      state = '10~19mm'
-    } else if(n >= 20.0 && n < 40.0) {
-      state = '20~39mm'
-    } else if(n >= 40.0 && n < 70.0) {
-      state = '40~69mm'
-    } else if(n >= 70.0) {
-      state = '70mm이상'
-    }
-    return state
-  }
-
-  getWsd(val) {
-    let state = ''
-    let n = parseFloat(val)
-
-    if(n < 4.0) {
-      state = '바람이 약하다'
-    } else if(n >= 4.0 && n < 9.0) {
-      state = '바람이 약간 강하다'
-    } else if(n >= 9.0 && n < 14.0) {
-      state = '바람이 강하다'
-    } else if(n >= 14.0) {
-      state = '바람이 매우 강하다'
-    }
-    return state
-  }
 
   render() {
     const { info } = this.props;
@@ -91,9 +91,10 @@ class WindCallout extends React.Component {
         <View>
           <Text>ID:{info.id}</Text>
           <Text>{info.location3}</Text>
-          <Text>{this.getPty(info.pty)}({this.getRn1(info.rn1)})</Text>
+          <Text>{getPty(info.pty)}({getRn1(info.rn1)})</Text>
           <Text>기온:{info.t1h}℃</Text>
-          <Text>풍속:{info.wsd}({this.getWsd(info.wsd)})</Text>
+          <Text>습도:{info.reh}%</Text>
+          <Text>풍속:{info.wsd}m/s({getWsd(info.wsd)})</Text>
           <Text>풍향:{info.wd16}</Text>
           <Text>last update:{info.createDate}</Text>
         </View>
@@ -111,54 +112,71 @@ class WindMarker extends React.Component {
   render() {
     const { info } = this.props;
     var image
+    var wsNm
+
     if(info.wd16 == 'N') {
       image = require('./images/N.png')
+      wsNm = '북'
     } else if(info.wd16 == 'NNE') {
       image = require('./images/NNE.png')
+      wsNm = '북북동'
     } else if(info.wd16 == 'NE') {
       image = require('./images/NE.png')
+      wsNm = '북동'
     } else if(info.wd16 == 'ENE') {
       image = require('./images/ENE.png')
+      wsNm = '동북동'
     } else if(info.wd16 == 'E') {
       image = require('./images/E.png')
+      wsNm = '동'
     } else if(info.wd16 == 'ESE') {
       image = require('./images/ESE.png')
+      wsNm = '동남동'
     } else if(info.wd16 == 'SE') {
       image = require('./images/SE.png')
+      wsNm = '남동'
     } else if(info.wd16 == 'SSE') {
       image = require('./images/SSE.png')
+      wsNm = '남남동'
     } else if(info.wd16 == 'S') {
       image = require('./images/S.png')
+      wsNm = '남'
     } else if(info.wd16 == 'SSW') {
       image = require('./images/SSW.png')
+      wsNm = '남남서'
     } else if(info.wd16 == 'SW') {
       image = require('./images/SW.png')
+      wsNm = '남서'
     } else if(info.wd16 == 'WSW') {
       image = require('./images/WSW.png')
+      wsNm = '서남서'
     } else if(info.wd16 == 'W') {
       image = require('./images/W.png')
+      wsNm = '서'
     } else if(info.wd16 == 'WNW') {
       image = require('./images/WNW.png')
+      wsNm = '서북서'
     } else if(info.wd16 == 'NW') {
       image = require('./images/NW.png')
+      wsNm = '북서'
     } else if(info.wd16 == 'NNW') {
       image = require('./images/NNW.png')
+      wsNm = '북북서'
     } else {
       image = require('./images/N.png')
+      wsNm = '정보없음'
     }
 
     return (
       <View style={styles.markerWrap}>
         <View style={styles.markerWrapItem}>
-          <Text>{info.wsd}</Text>
-          <Text>풍속(m/x)</Text>
-        </View>
-        <View style={styles.markerWrapItem}>
           <Image
-            style={{width: 40, height: 40}}
+            style={styles.markerImage}
+            resizeMode={'cover'}
             source={image}
           />
-          <Text>{info.wd16}</Text>
+          <Text>{wsNm}</Text>
+          <Text>({info.wsd}m/s)</Text>
         </View>
       </View>
     );
@@ -171,65 +189,19 @@ WindMarker.propTypes = {
 
 class RainMarker extends React.Component {
 
-  getPty(val) {
-    let state = ''
-
-    if(val == '0') {
-      state = '없음'
-    } else if(val == '1') {
-      state = '비'
-    } else if(val == '2') {
-      state = '비/눈'
-    } else if(val == '3') {
-      state = '눈'
-    } else if(val == '4') {
-      state = '소나기'
-    } else if(val == '5') {
-      state = '빗방울'
-    } else if(val == '6') {
-      state = '빗방울/눈날림'
-    } else if(val == '7') {
-      state = '눈날림'
-    }
-    return state
-  }
-
-  getRn1(val) {
-    let state = ''
-    let n = parseFloat(val)
-
-    if(n < 0.1) {
-      state = '0mm'
-    } else if(n >= 0.1 && n < 1.0) {
-      state = '1mm미만'
-    } else if(n >= 1.0 && n < 5.0) {
-      state = '1~4mm'
-    } else if(n >= 5.0 && n < 10.0) {
-      state = '5~9mm'
-    } else if(n >= 10.0 && n < 20.0) {
-      state = '10~19mm'
-    } else if(n >= 20.0 && n < 40.0) {
-      state = '20~39mm'
-    } else if(n >= 40.0 && n < 70.0) {
-      state = '40~69mm'
-    } else if(n >= 70.0) {
-      state = '70mm이상'
-    }
-    return state
-  }
-
   render() {
     const { info } = this.props;
 
     return (
       <View style={styles.markerWrap}>
         <View style={styles.markerWrapItem}>
-        <Text>{this.getPty(info.pty)}({this.getRn1(info.rn1)})</Text>
+        <Text>{getPty(info.pty)}({getRn1(info.rn1)})</Text>
           <Text>강수량</Text>
         </View>
         <View style={styles.markerWrapItem}>
           <Image
-            style={{width: 40, height: 40}}
+            style={styles.markerImage}
+            resizeMode={'cover'}
             source={require('./images/rain.png')}
           />
         </View>
@@ -260,8 +232,8 @@ class Map extends Component {
   }
 
   apiWindData(latitude, longitude) {
-    let url = 'http://118.67.129.162/api/wind/data/'+latitude+'/'+longitude // dev
-    //let url = 'http://10.190.10.77:5000/api/wind/data/'+latitude+'/'+longitude // local
+   //let url = 'http://10.190.10.77:5000/api/wind/data/'+latitude+'/'+longitude // local
+    let url = 'http://118.67.129.162/api/wind/data/'+latitude+'/'+longitude // dev    
     fetch(url)
       .then((response) => response.json())
       .then((json) => this.setState({data: json.response}))
@@ -278,7 +250,7 @@ class Map extends Component {
   }
 
   onRegionChangeComplete = (region) => {
-    console.log("onRegionChangeComplete.. lat:"+region.latitude+", lon:"+region.longitude)
+    //console.log("onRegionChangeComplete.. lat:"+region.latitude+", lon:"+region.longitude)
     this.apiWindData(region.latitude, region.longitude)
   }
 
@@ -360,7 +332,7 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-start',
   },
   markerWrap: {
-    width: 140,
+    width: 80,
     flexDirection: 'row',
     flex: 1,
     backgroundColor: Colors.white,
@@ -371,6 +343,12 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  markerImage: {
+    flex: 1, 
+    width: 30, 
+    height: 30, 
+    transform: [{ scale: 0.8 }]
   },
   buttonContainer: {
     width: 100,
