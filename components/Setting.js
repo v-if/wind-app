@@ -1,5 +1,14 @@
 import React, { useEffect, useState } from 'react';
-import { TouchableOpacity, FlatList, Text, View, StyleSheet } from 'react-native';
+import { TouchableOpacity, FlatList, Text, View, StyleSheet, Platform, Linking  } from 'react-native';
+
+function goToStore() {
+  console.log('Go to AppStore:'+Platform.OS)
+  if(Platform.OS === 'ios') {
+    Linking.openURL('itms-apps://itunes.apple.com/us/app/apple-store/myiosappid?mt=8')
+  } else if(Platform.OS === 'android') {
+    Linking.openURL("market://details?id=com.studiobustle.bookjuk");
+  }
+}
 
 export default function Setting({ navigation }) {
   return (
@@ -9,11 +18,10 @@ export default function Setting({ navigation }) {
           {key: 'About', title: 'About'},
           {key: 'Feedback', title: '피드백 보내기'},
           {key: 'AppStore', title: '앱 평점주기 / 리뷰'},
-          {key: 'Jackson', title: '개발자 소개'},
-          {key: 'James', title: '사용 라이브러리'},
+          {key: 'Library', title: '사용 라이브러리'},
         ]}
         renderItem={({item}) => 
-        <TouchableOpacity onPress={() => navigation.navigate(item.key)}>
+        <TouchableOpacity onPress={() => item.key == 'AppStore' ? goToStore() : navigation.navigate(item.key)}>
           <Text style={styles.item}>{item.title}</Text>
         </TouchableOpacity>
       }

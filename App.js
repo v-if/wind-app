@@ -7,13 +7,11 @@ import { createStackNavigator } from '@react-navigation/stack';
 import {
   Colors,
   Home,
-  WindMap,
   Map,
-  MapRegion,
   Setting,
   About,
   Feedback,
-  AppStore,
+  Library,
 } from './components';
 
 const Stack = createStackNavigator();
@@ -104,6 +102,17 @@ export default class example extends Component {
           <Stack.Screen 
             name="Feedback" 
             component={Feedback}
+            options={({ navigation, route }) => ({
+              headerStyle: styles.header,
+              headerTintColor: Colors.lighter,
+              headerTitleStyle: {
+                fontWeight: 'bold',
+              },
+            })}
+          />
+          <Stack.Screen 
+            name="Library" 
+            component={Library}
             options={({ navigation, route }) => ({
               headerStyle: styles.header,
               headerTintColor: Colors.lighter,
