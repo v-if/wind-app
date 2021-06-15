@@ -6,7 +6,7 @@ function goToStore() {
   if(Platform.OS === 'ios') {
     Linking.openURL('itms-apps://itunes.apple.com/us/app/apple-store/myiosappid?mt=8')
   } else if(Platform.OS === 'android') {
-    Linking.openURL("market://details?id=com.studiobustle.bookjuk");
+    Linking.openURL("market://details?id=com.tkpark.wind");
   }
 }
 

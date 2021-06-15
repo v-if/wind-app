@@ -6,11 +6,11 @@ export default function Library({ navigation }) {
   return (
     <View style={styles.container}>
       <View style={styles.group}>
-        <Text style={styles.title}>Data Source</Text>
-        <Text style={styles.desc}>- 기상청 동네예보 초단기실황</Text>
+        <Text style={styles.title}>Open API</Text>
+        <Text style={styles.desc}>- 기상청 동네예보 초단기예보조회</Text>
       </View>
       <View style={styles.group}>
-        <Text style={styles.title}>Application</Text>
+        <Text style={styles.title}>Open Source</Text>
         <Text style={styles.desc}>- React Native</Text>
         <Text style={styles.desc}>- @react-navigation/native</Text>
         <Text style={styles.desc}>- @react-navigation/stack</Text>

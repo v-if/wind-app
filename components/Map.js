@@ -8,6 +8,8 @@ import MapView, {
   Callout,
 } from 'react-native-maps';
 
+const _ = require('lodash')
+
 const { width, height } = Dimensions.get('window');
 
 const ASPECT_RATIO = width / height;
@@ -90,13 +92,9 @@ class WindCallout extends React.Component {
       >
         <View>
           <Text>ID:{info.id}</Text>
-          <Text>{info.location3}</Text>
-          <Text>{getPty(info.pty)}({getRn1(info.rn1)})</Text>
-          <Text>기온:{info.t1h}℃</Text>
-          <Text>습도:{info.reh}%</Text>
-          <Text>풍속:{info.wsd}m/s({getWsd(info.wsd)})</Text>
-          <Text>풍향:{info.wd16}</Text>
-          <Text>last update:{info.createDate}</Text>
+          <Text>동네예보:{info.location3}</Text>
+          <Text>{info.forecastTime}</Text>
+          <Text>update:{info.createDate}</Text>
         </View>
       </Callout>
     );
@@ -246,21 +244,72 @@ class Map extends Component {
         longitudeDelta: LONGITUDE_DELTA,
       },
       events: [],
+      timezone: [],
+      time: '',
       data: [],
       tp: 'wind',
       isLoading: false,
     };
   }
 
+  dataProcessing(res) {
+    //console.log('res.length:'+res.length)
+    //console.log('res %o:'+res)
+
+    //let timezone = _.groupBy(res, instance => instance.forecastTime)
+    let groups  = _.groupBy(res, 'forecastTime')
+    //console.log(groups)
+
+
+
+    //let timezone = _.map(groups , function(value, key) {
+    //  return key
+    //})
+    //console.log(timezone.length)
+    
+
+
+    let data = _.map(groups , function(value, key) {
+      //console.log(value)
+      return {
+        timezone: key,
+        marker: value
+      }
+    })
+
+    if(this.state.time == '') {
+      this.setState({time: data['0'].timezone})
+    }
+    this.setState({data: data})
+
+    //console.log(temp[n].marker)
+    //console.log(data['2'].marker)
+    //console.log(data['0'].timezone)
+
+    //let temp = data.find(d => d.timezone == "1400")
+    //console.log(temp)
+    
+
+    //this.setState({data: temp['0'].marker})
+  }
+
   apiWindData(latitude, longitude) {
     this.setState({isLoading: true})
-   //let url = 'http://10.190.10.77:5000/api/wind/data/'+latitude+'/'+longitude // local
-    let url = 'http://118.67.129.162/api/wind/data/'+latitude+'/'+longitude // dev    
+    // api/wind/data/
+    //let url = 'http://10.190.10.77:5000/api/wind/data/'+latitude+'/'+longitude // local
+    //let url = 'http://118.67.129.162/api/wind/data/'+latitude+'/'+longitude // dev    
+
+    // api/wind/forecast
+    let url = 'http://118.67.129.162/api/wind/forecast/'+latitude+'/'+longitude // dev    
     fetch(url)
       .then((response) => response.json())
-      .then((json) => this.setState({data: json.response}))
+      .then((json) => this.dataProcessing(json.response))
       .catch((error) => console.error(error))
       .finally(() => this.setState({isLoading: false}));
+  }
+
+  onTimezoneButtonPress = (time) => {
+    this.setState({time: time})
   }
 
   onWindButtonPress = () => {
@@ -309,22 +358,26 @@ class Map extends Component {
           initialRegion={region}
           onRegionChangeComplete={this.onRegionChangeComplete}
         >
-          {this.state.data.map(marker => {
-            return <Marker
-                key={marker.id}
-                info={marker}
-                tracksViewChanges={false}
-                coordinate={{latitude: parseFloat(marker.latitude), longitude: parseFloat(marker.longitude)}}
-                title={"lat:"+marker.latitude+", lon:"+marker.longitude}
-                description={"nx:"+marker.nx+", ny:"+marker.ny}
-              >
-                {this.state.tp == 'wind' ? <WindMarker key={'wind_'+marker.id} info={marker} /> : this.state.tp == 'rain' ? <RainMarker key={'rain_'+marker.id} info={marker} /> : <TempMarker key={'temp_'+marker.id} info={marker} /> }
-                <WindCallout key={'callout'+marker.id} info={marker} />
-              </Marker>
-          })}
+          {this.state.data
+            .filter(data => data.timezone == this.state.time)
+            .map(data => {
+              return data.marker.map(marker => {
+                return <Marker
+                  key={marker.id}
+                  info={marker}
+                  tracksViewChanges={false}
+                  coordinate={{latitude: parseFloat(marker.latitude), longitude: parseFloat(marker.longitude)}}
+                  title={"lat:"+marker.latitude+", lon:"+marker.longitude}
+                  description={"nx:"+marker.nx+", ny:"+marker.ny}
+                >
+                  {this.state.tp == 'wind' ? <WindMarker key={'wind_'+marker.id} info={marker} /> : this.state.tp == 'rain' ? <RainMarker key={'rain_'+marker.id} info={marker} /> : <TempMarker key={'temp_'+marker.id} info={marker} /> }
+                  <WindCallout key={'callout'+marker.id} info={marker} />
+                </Marker>
+              })
+            })}
         </MapView>
         <View style={styles.buttonContainer}>
-          <View>
+          <View style={styles.buttonWrap}>
             <TouchableOpacity
               style={this.state.tp == 'wind' ? styles.bubbleSeleted : styles.bubble}
               onPress={this.onWindButtonPress}
@@ -351,7 +404,21 @@ class Map extends Component {
             </TouchableOpacity>
           </View>
         </View>
-        {this.state.isLoading ? <ActivityIndicator style={{ width: width, height: height, marginTop: 160, alignItems: 'center', justifyContent: 'flex-start' }}/> : <View></View> }
+        <View style={styles.indicatorContainer}>
+          {this.state.isLoading ? <ActivityIndicator/> : <View></View> }
+        </View>
+        <View style={styles.timezoneContainer}>
+          <View style={styles.timezoneWrap}>
+            {this.state.data.map(data => {
+              return <TouchableOpacity 
+              style={this.state.time == data.timezone ? styles.bubbleSeleted : styles.bubble}
+                onPress={() => this.onTimezoneButtonPress(data.timezone)}
+                >
+                <Text>{data.timezone}</Text>
+              </TouchableOpacity>
+            })}
+          </View>
+        </View>
       </View>
     );
   }
@@ -368,8 +435,8 @@ const styles = StyleSheet.create({
   container: {
     ...StyleSheet.absoluteFillObject,
     flex: 1,
-    alignItems: 'flex-end',
-    justifyContent: 'flex-start',
+    backgroundColor: Colors.black,
+    flexDirection: 'column',
   },
   markerWrap: {
     width: 70,
@@ -393,12 +460,31 @@ const styles = StyleSheet.create({
     height: 30, 
     transform: [{ scale: 0.8 }]
   },
-  buttonContainer: {
-    width: 63,
-    marginTop: 10,
-    marginRight: 10,
+  indicatorContainer: {
+    flex: 1,
     backgroundColor: Colors.transform,
-    flexDirection: 'column',
+    alignItems: 'center', 
+    justifyContent: 'center',
+  },
+  timezoneContainer: {
+    flex: 1,
+    backgroundColor: Colors.transform,
+    alignItems: 'center',
+    justifyContent: 'flex-end',
+    margin: 10,
+  },
+  timezoneWrap: {
+    flexDirection: 'row',
+  },
+  buttonContainer: {
+    flex: 1,
+    backgroundColor: Colors.transform,
+    alignItems: 'flex-end',
+    justifyContent: 'flex-start',
+    margin: 10,
+  },
+  buttonWrap: {
+    width: 63,
   },
   bubble: {
     backgroundColor: Colors.clouds,
