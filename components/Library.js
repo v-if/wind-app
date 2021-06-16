@@ -17,6 +17,7 @@ export default function Library({ navigation }) {
         <Text style={styles.desc}>- react-native-splash-screen</Text>
         <Text style={styles.desc}>- react-native-super-grid</Text>
         <Text style={styles.desc}>- react-native-maps</Text>
+        <Text style={styles.desc}>- react-native-webview</Text>
         <Text style={styles.desc}>- react-native-vector-icons</Text>
       </View>
       <View style={styles.group}>

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { ActivityIndicator, Text, TextInput, View, StyleSheet, Button, Alert } from 'react-native';
-import { RadioButton } from 'react-native-paper';
+import { ActivityIndicator, Text, View, StyleSheet, Alert } from 'react-native';
+import { RadioButton, Button, TextInput } from 'react-native-paper';
 import Colors from './Colors';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 
@@ -59,16 +59,18 @@ export default function Feedback({ navigation }) {
           </RadioButton.Group>
         </View>
         <View style={styles.row}>
-          <Text style={styles.label}>이름</Text>
           <TextInput 
             style={styles.input}
+            mode="outlined"
+            label="이름"
             onChangeText={text => setName(text)}
           ></TextInput>
         </View>
         <View style={styles.row}>
-          <Text style={styles.label}>연락처</Text>
           <TextInput 
             style={styles.input}
+            mode="outlined"
+            label="연락처"
             onChangeText={text => setEmail(text)}
           ></TextInput>
         </View>
@@ -82,9 +84,10 @@ export default function Feedback({ navigation }) {
         </View>
         <View style={styles.row}>
           <Button
-            title="Send"
+            icon="send" 
+            mode="outlined"
             onPress={apiWrite}
-          />
+          >Send</Button>
         </View>
       </View>
     </KeyboardAwareScrollView>
@@ -114,9 +117,6 @@ const styles = StyleSheet.create({
   input: {
     height: 40,
     flex: 1,
-    borderColor: Colors.peter_river,
-    backgroundColor: Colors.white,
-    borderWidth: 1,
   },
   inputMultiline: {
     height: 160,
