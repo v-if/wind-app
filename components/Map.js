@@ -2,6 +2,7 @@ import Svg, { Image, } from 'react-native-svg';
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import { TouchableOpacity, StyleSheet, View, Text, Dimensions, ActivityIndicator } from 'react-native';
+import Slider from "react-native-slider";
 import Colors from './Colors';
 import MapView, {
   Marker,
@@ -106,10 +107,9 @@ class WindCallout extends React.Component {
       >
         <View>
           <Text>동네예보 : {info.location3}</Text>
-          <Text>sky:{getSky(info.sky)}</Text>
-          <Text>{info.forecastTime}</Text>
-          <Text>update:{info.createDate}</Text>
           <Text>(ID:{info.id})</Text>
+          <Text>update</Text>
+          <Text>{info.createDate}</Text>
         </View>
       </Callout>
     );
@@ -370,8 +370,8 @@ class Map extends Component {
         longitudeDelta: LONGITUDE_DELTA,
       },
       events: [],
-      timezone: [],
       time: '',
+      timeSeq: 0,
       data: [],
       tp: 'wind',
       isLoading: false,
@@ -408,6 +408,10 @@ class Map extends Component {
       .then((json) => this.dataProcessing(json.response))
       .catch((error) => console.error(error))
       .finally(() => this.setState({isLoading: false}));
+  }
+
+  onTimezoneSeqButtonPress = (seq) => {
+    this.setState({time: this.state.data[seq].timezone})
   }
 
   onTimezoneButtonPress = (time) => {
@@ -510,14 +514,30 @@ class Map extends Component {
           {this.state.isLoading ? <ActivityIndicator/> : <View></View> }
         </View>
         <View style={styles.timezoneContainer}>
+          {this.state.data.length > 0 ? 
+            <View style={[styles.sliderWrap, this.state.data.length == 0 ? styles.padding10 : this.state.data.length == 6 ? styles.padding25 : this.state.data.length == 5 ? styles.padding30 : styles.padding55]}>
+              <Slider
+                // https://github.com/callstack/react-native-slider
+                style={styles.slider}
+                value={this.state.timeSeq}
+                minimumValue={0}
+                maximumValue={this.state.data.length > 0 ? this.state.data.length - 1 : 1}
+                step={1}
+                onValueChange={value => this.onTimezoneSeqButtonPress(value)}
+              />
+            </View>
+            : <View></View>
+          }
           <View style={styles.timezoneWrap}>
             {this.state.data.map(data => {
               return <TouchableOpacity 
               key={data.timezone}
-              style={this.state.time == data.timezone ? styles.bubbleSeleted : styles.bubble}
+              style={this.state.time == data.timezone ? styles.timezoneSeleted : styles.timezone}
                 onPress={() => this.onTimezoneButtonPress(data.timezone)}
                 >
-                <Text>{data.timezone.substring(8, 10)}:{data.timezone.substring(10, 12)}</Text>
+                <Text style={this.state.time == data.timezone ? styles.timezoneFontSeleted : styles.timezoneFont}>
+                  {data.timezone.substring(8, 10)}:{data.timezone.substring(10, 12)}
+                </Text>
               </TouchableOpacity>
             })}
           </View>
@@ -533,7 +553,8 @@ Map.propTypes = {
 
 const styles = StyleSheet.create({
   callout: {
-    width: 160,
+    width: 140,
+    padding: 2,
   },
   container: {
     ...StyleSheet.absoluteFillObject,
@@ -574,10 +595,72 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.transform,
     alignItems: 'center',
     justifyContent: 'flex-end',
-    margin: 10,
+    borderRadius: 10,
+    padding: 10,
   },
   timezoneWrap: {
     flexDirection: 'row',
+    marginBottom: 20,
+    opacity: 0.9,
+    backgroundColor: Colors.white,
+    borderBottomLeftRadius: 10,
+    borderBottomRightRadius: 10,
+  },
+  padding10: {
+    paddingLeft: 10,
+    paddingRight: 10,
+  },
+  padding20: {
+    paddingLeft: 20,
+    paddingRight: 20,
+  },
+  padding25: {
+    paddingLeft: 25,
+    paddingRight: 25,
+  },
+  padding30: {
+    paddingLeft: 30,
+    paddingRight: 30,
+  },
+  padding40: {
+    paddingLeft: 40,
+    paddingRight: 40,
+  },
+  padding55: {
+    paddingLeft: 55,
+    paddingRight: 55,
+  },
+  timezone: {
+    flex: 1,
+    backgroundColor: Colors.transform,
+    alignItems: 'center',
+  },
+  timezoneSeleted: {
+    flex: 1,
+    backgroundColor: Colors.transform,
+    alignItems: 'center',
+  },
+  timezoneFont: {
+    color: Colors.black,
+    fontSize: 13,
+  },
+  timezoneFontSeleted: {
+    color: Colors.black,
+    fontSize: 14,
+    fontWeight: 'bold',
+  },
+  sliderWrap: {
+    flexDirection: 'row',
+    height: 30,
+    opacity: 0.9,
+    backgroundColor: Colors.white,
+    alignItems: 'center',
+    justifyContent: 'flex-end',
+    borderTopLeftRadius: 10,
+    borderTopRightRadius: 10,
+  },
+  slider: {
+    flex: 1,
   },
   buttonContainer: {
     flex: 1,
