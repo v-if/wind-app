@@ -1,6 +1,7 @@
+import Svg, { Image, } from 'react-native-svg';
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
-import { TouchableOpacity, StyleSheet, View, Text, Image, Dimensions, ActivityIndicator } from 'react-native';
+import { TouchableOpacity, StyleSheet, View, Text, Dimensions, ActivityIndicator } from 'react-native';
 import Colors from './Colors';
 import MapView, {
   Marker,
@@ -123,11 +124,10 @@ class WindMarker extends React.Component {
 
   render() {
     const { info } = this.props;
-    var image
-    var wsNm
+    let image, wsNm
 
-    let x = info.wd16.substring(0, 1)
-    if(x == 'N') {
+    let direction = info.wd16.substring(0, 1)
+    if(direction == 'N') {
       if(info.wd16 == 'N') {
         image = require('./images/N.png')
         wsNm = '북'
@@ -144,7 +144,7 @@ class WindMarker extends React.Component {
         image = require('./images/NNW.png')
         wsNm = '북북서'
       }
-    } else if(x == 'S') {
+    } else if(direction == 'S') {
       if(info.wd16 == 'S') {
         image = require('./images/S.png')
         wsNm = '남'
@@ -161,7 +161,7 @@ class WindMarker extends React.Component {
         image = require('./images/SSW.png')
         wsNm = '남남서'
       } 
-    } else if(x == 'E') {
+    } else if(direction == 'E') {
       if(info.wd16 == 'E') {
         image = require('./images/E.png')
         wsNm = '동'
@@ -172,7 +172,7 @@ class WindMarker extends React.Component {
         image = require('./images/ESE.png')
         wsNm = '동남동'
       }
-    } else if(x == 'W') {
+    } else if(direction == 'W') {
       if(info.wd16 == 'W') {
         image = require('./images/W.png')
         wsNm = '서'
@@ -185,67 +185,16 @@ class WindMarker extends React.Component {
       } 
     }
 
-    /*if(info.wd16 == 'N') {
-      image = require('./images/N.png')
-      wsNm = '북'
-    } else if(info.wd16 == 'NNE') {
-      image = require('./images/NNE.png')
-      wsNm = '북북동'
-    } else if(info.wd16 == 'NE') {
-      image = require('./images/NE.png')
-      wsNm = '북동'
-    } else if(info.wd16 == 'ENE') {
-      image = require('./images/ENE.png')
-      wsNm = '동북동'
-    } else if(info.wd16 == 'E') {
-      image = require('./images/E.png')
-      wsNm = '동'
-    } else if(info.wd16 == 'ESE') {
-      image = require('./images/ESE.png')
-      wsNm = '동남동'
-    } else if(info.wd16 == 'SE') {
-      image = require('./images/SE.png')
-      wsNm = '남동'
-    } else if(info.wd16 == 'SSE') {
-      image = require('./images/SSE.png')
-      wsNm = '남남동'
-    } else if(info.wd16 == 'S') {
-      image = require('./images/S.png')
-      wsNm = '남'
-    } else if(info.wd16 == 'SSW') {
-      image = require('./images/SSW.png')
-      wsNm = '남남서'
-    } else if(info.wd16 == 'SW') {
-      image = require('./images/SW.png')
-      wsNm = '남서'
-    } else if(info.wd16 == 'WSW') {
-      image = require('./images/WSW.png')
-      wsNm = '서남서'
-    } else if(info.wd16 == 'W') {
-      image = require('./images/W.png')
-      wsNm = '서'
-    } else if(info.wd16 == 'WNW') {
-      image = require('./images/WNW.png')
-      wsNm = '서북서'
-    } else if(info.wd16 == 'NW') {
-      image = require('./images/NW.png')
-      wsNm = '북서'
-    } else if(info.wd16 == 'NNW') {
-      image = require('./images/NNW.png')
-      wsNm = '북북서'
-    } else {
-      image = require('./images/N.png')
-      wsNm = '정보없음'
-    }*/
-
     return (
       <View style={styles.markerWrap}>
         <View style={styles.markerWrapItem}>
-          <Image
-            style={styles.markerImage}
-            resizeMode={'cover'}
-            source={image}
-          />
+          <Svg height="30" width="30">
+            <Image
+              width="100%"
+              height="100%"
+              href={image}
+            />
+          </Svg>
           <Text>{wsNm}</Text>
           <Text>({info.wsd}m/s)</Text>
         </View>
@@ -311,11 +260,13 @@ class RainMarker extends React.Component {
     return (
       <View style={styles.markerWrap}>
         <View style={styles.markerWrapItem}>
-          <Image
-            style={styles.markerImage}
-            resizeMode={'cover'}
-            source={image}
-          />
+          <Svg height="30" width="30">
+            <Image
+              width="100%"
+              height="100%"
+              href={image}
+            />
+          </Svg>
           <Text>{skyNm}</Text>
           <Text>{getRn1(info.rn1)}</Text>
         </View>
@@ -388,11 +339,13 @@ class TempMarker extends React.Component {
     return (
       <View style={styles.markerWrap}>
         <View style={styles.markerWrapItem}>
-          <Image
-              style={styles.markerImage}
-              resizeMode={'cover'}
-              source={image}
+          <Svg height="30" width="30">
+            <Image
+              width="100%"
+              height="100%"
+              href={image}
             />
+          </Svg>
           <Text>{skyNm}</Text>
           <Text>{info.t1h}℃</Text>
         </View>
