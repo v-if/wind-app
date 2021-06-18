@@ -56,7 +56,6 @@ export default function Home({ navigation }) {
               roadNm: item.roadNm,
               latitude: item.latitude,
               longitude: item.longitude,
-              tp: 'wind'
             })}
           >
             <View style={styles.item}>

@@ -108,7 +108,7 @@ class WindCallout extends React.Component {
         <View>
           <Text>동네예보 : {info.location3}</Text>
           <Text>(ID:{info.id})</Text>
-          <Text>update</Text>
+          <Text>Update</Text>
           <Text>{info.createDate}</Text>
         </View>
       </Callout>
@@ -219,42 +219,47 @@ class RainMarker extends React.Component {
       if(currentTime >= '0600' && currentTime <= '2000') {
         if(info.sky == '1') {
           image = require('./images/DB01.png')
+          skyNm = '맑음'
         } else if(info.sky == '3') {
           image = require('./images/DB03.png')
+          skyNm = '구름많음'
         } else if(info.sky == '4') {
           image = require('./images/DB04.png')
+          skyNm = '흐림'
         }
       } else {
         if(info.sky == '1') {
           image = require('./images/DB01_N.png')
+          skyNm = '맑음'
         } else if(info.sky == '3') {
           image = require('./images/DB03_N.png')
+          skyNm = '구름많음'
         } else if(info.sky == '4') {
           image = require('./images/DB04_N.png')
+          skyNm = '흐림'
         }
       }
-      skyNm = '없음'
     } else if(info.pty == '1') {
       image = require('./images/DB05.png')
-      skyNm = '비'
+      skyNm = '비' + '(' + getRn1(info.rn1) + ')'
     } else if(info.pty == '2') {
       image = require('./images/DB06.png')
-      skyNm = '비/눈'
+      skyNm = '비/눈' + '(' + getRn1(info.rn1) + ')'
     } else if(info.pty == '3') {
       image = require('./images/DB08.png')
-      skyNm = '눈'
+      skyNm = '눈' + '(' + getRn1(info.rn1) + ')'
     } else if(info.pty == '4') {
       image = require('./images/DB09.png')
-      skyNm = '소나기'
+      skyNm = '소나기' + '(' + getRn1(info.rn1) + ')'
     } else if(info.pty == '5') {
       image = require('./images/DB10.png')
-      skyNm = '빗방울'
+      skyNm = '빗방울' + '(' + getRn1(info.rn1) + ')'
     } else if(info.pty == '6') {
       image = require('./images/DB11.png')
-      skyNm = '빗방울/눈날림'
+      skyNm = '빗방울/눈날림' + '(' + getRn1(info.rn1) + ')'
     } else if(info.pty == '7') {
       image = require('./images/DB12.png')
-      skyNm = '눈날림'
+      skyNm = '눈날림' + '(' + getRn1(info.rn1) + ')'
     }
 
     return (
@@ -268,7 +273,7 @@ class RainMarker extends React.Component {
             />
           </Svg>
           <Text>{skyNm}</Text>
-          <Text>{getRn1(info.rn1)}</Text>
+          <Text>{info.t1h}℃</Text>
         </View>
       </View>
     );
@@ -390,13 +395,14 @@ class Map extends Component {
     let data = _.orderBy(merge, ['timezone'], ['asc'])
 
     if(this.state.time == '') {
-      this.setState({time: data['0'].timezone})
+      this.setState({data: data, time: data['0'].timezone})
+    } else {
+      this.setState({data: data})
     }
-    this.setState({data: data})
   }
 
   apiWindData(latitude, longitude) {
-    this.setState({isLoading: true})
+    //this.setState({isLoading: true})
     // api/wind/data/
     //let url = 'http://10.190.10.77:5000/api/wind/data/'+latitude+'/'+longitude // local
     //let url = 'http://118.67.129.162/api/wind/data/'+latitude+'/'+longitude // dev    
@@ -407,7 +413,7 @@ class Map extends Component {
       .then((response) => response.json())
       .then((json) => this.dataProcessing(json.response))
       .catch((error) => console.error(error))
-      .finally(() => this.setState({isLoading: false}));
+      .finally(() => console.log(url)); // this.setState({isLoading: false})
   }
 
   onTimezoneSeqButtonPress = (seq) => {
@@ -439,8 +445,6 @@ class Map extends Component {
     const { navigation, route } = this.props;
     const { roadNm, tp } = route.params;
     navigation.setOptions({ title: roadNm })
-
-    this.setState({tp: tp})
   }
 
   render() {
@@ -476,7 +480,7 @@ class Map extends Component {
                   title={"lat:"+marker.latitude+", lon:"+marker.longitude}
                   description={"nx:"+marker.nx+", ny:"+marker.ny}
                 >
-                  {this.state.tp == 'wind' ? <WindMarker key={'wind_'+marker.id} info={marker} /> : this.state.tp == 'rain' ? <RainMarker key={'rain_'+marker.id} info={marker} /> : <TempMarker key={'temp_'+marker.id} info={marker} /> }
+                  {this.state.tp == 'wind' ? <WindMarker key={'wind_'+marker.id} info={marker} /> : <RainMarker key={'rain_'+marker.id} info={marker} /> }
                   <WindCallout key={'callout'+marker.id} info={marker} />
                 </Marker>
               })
@@ -497,15 +501,7 @@ class Map extends Component {
               onPress={this.onRainButtonPress}
             >
               <View>
-                <Text style={this.state.tp == 'rain' ? styles.bubbleFontSeleted : styles.bubbleFont}>강수</Text>
-              </View>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={this.state.tp == 'temp' ? styles.bubbleSeleted : styles.bubble}
-              onPress={this.onTempButtonPress}
-            >
-              <View>
-                <Text style={this.state.tp == 'temp' ? styles.bubbleFontSeleted : styles.bubbleFont}>기온</Text>
+                <Text style={this.state.tp == 'rain' ? styles.bubbleFontSeleted : styles.bubbleFont}>날씨</Text>
               </View>
             </TouchableOpacity>
           </View>
@@ -515,9 +511,9 @@ class Map extends Component {
         </View>
         <View style={styles.timezoneContainer}>
           {this.state.data.length > 0 ? 
-            <View style={[styles.sliderWrap, this.state.data.length == 0 ? styles.padding10 : this.state.data.length == 6 ? styles.padding25 : this.state.data.length == 5 ? styles.padding30 : styles.padding55]}>
+            <View style={[styles.sliderWrap, this.state.data.length == 0 ? styles.padding10 : this.state.data.length == 6 ? styles.padding20 : this.state.data.length == 5 ? styles.padding30 : styles.padding40]}>
               <Slider
-                // https://github.com/callstack/react-native-slider
+                // https://github.com/jeanregisser/react-native-slider
                 style={styles.slider}
                 value={this.state.timeSeq}
                 minimumValue={0}
@@ -610,6 +606,10 @@ const styles = StyleSheet.create({
     paddingLeft: 10,
     paddingRight: 10,
   },
+  padding15: {
+    paddingLeft: 15,
+    paddingRight: 15,
+  },
   padding20: {
     paddingLeft: 20,
     paddingRight: 20,
@@ -622,9 +622,21 @@ const styles = StyleSheet.create({
     paddingLeft: 30,
     paddingRight: 30,
   },
+  padding35: {
+    paddingLeft: 35,
+    paddingRight: 35,
+  },
   padding40: {
     paddingLeft: 40,
     paddingRight: 40,
+  },
+  padding45: {
+    paddingLeft: 45,
+    paddingRight: 45,
+  },
+  padding50: {
+    paddingLeft: 50,
+    paddingRight: 50,
   },
   padding55: {
     paddingLeft: 55,
