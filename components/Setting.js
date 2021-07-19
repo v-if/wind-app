@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { TouchableOpacity, FlatList, Text, View, StyleSheet, Platform, Linking  } from 'react-native';
+import Colors from './Colors';
 
 function goToStore() {
   console.log('Go to AppStore:'+Platform.OS)
@@ -33,6 +34,7 @@ export default function Setting({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: Colors.white,
    },
    item: {
      padding: 10,

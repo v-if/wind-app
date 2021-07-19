@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { ActivityIndicator, Text, View, StyleSheet, Alert } from 'react-native';
-import { RadioButton, Button, TextInput } from 'react-native-paper';
+import { Text, View, StyleSheet, TextInput } from 'react-native';
+import { RadioButton, Button } from 'react-native-paper';
 import Colors from './Colors';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 
@@ -59,22 +59,21 @@ export default function Feedback({ navigation }) {
           </RadioButton.Group>
         </View>
         <View style={styles.row}>
+          <Text style={styles.label}>이름</Text>
           <TextInput 
             style={styles.input}
-            mode="outlined"
-            label="이름"
             onChangeText={text => setName(text)}
           ></TextInput>
         </View>
         <View style={styles.row}>
+        <Text style={styles.label}>연락처</Text>
           <TextInput 
             style={styles.input}
-            mode="outlined"
-            label="연락처"
             onChangeText={text => setEmail(text)}
           ></TextInput>
         </View>
-        <View style={styles.row}>
+        <View style={styles.contentWrap}>
+        <Text style={styles.label}>내용</Text>
           <TextInput
             style={styles.inputMultiline}
             multiline
@@ -84,7 +83,6 @@ export default function Feedback({ navigation }) {
         </View>
         <View style={styles.row}>
           <Button
-            icon="send" 
             mode="outlined"
             onPress={apiWrite}
           >Send</Button>
@@ -97,12 +95,15 @@ export default function Feedback({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flexDirection: 'column',
+    backgroundColor: Colors.white,
   },
   row: {
     flexDirection: 'row',
     flex: 1,
     alignItems: "center",
-    margin: 10,
+    marginTop: 10,
+    marginLeft: 10,
+    marginRight: 10,
   },
   picker: {
     height: 40,
@@ -117,12 +118,18 @@ const styles = StyleSheet.create({
   input: {
     height: 40,
     flex: 1,
+    borderWidth: 1,
+    backgroundColor: Colors.lighter,
+  },
+  contentWrap: {
+    flexDirection: 'column',
+    margin: 10,
   },
   inputMultiline: {
     height: 160,
     flex: 1,
-    borderColor: Colors.peter_river,
-    backgroundColor: Colors.white,
+    marginTop: 10,
+    backgroundColor: Colors.lighter,
     borderWidth: 1,
     textAlignVertical: 'top',
   },

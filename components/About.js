@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Image, Text, View, StyleSheet, Dimensions  } from 'react-native';
+import Colors from './Colors';
 import packageJson from './../package.json';
 
 export default function About({ navigation }) {
@@ -12,8 +13,8 @@ export default function About({ navigation }) {
   return (
     <View style={styles.container}>
       <Image
-        style={{width: width, height: 420}}
-        source={require('./images/about.png')}
+        style={{width: width, height: 250, marginTop: 4}}
+        source={require('./images/about.jpg')}
       />
       <Text>이 앱은 라이더들을 위해 만들어졌습니다.</Text>
       <Text>라이딩을 할때 순풍순풍 바람을 타고 가보세요.</Text>
@@ -33,5 +34,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: 'center',
+    backgroundColor: Colors.white,
   },
 });

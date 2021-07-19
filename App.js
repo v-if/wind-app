@@ -1,27 +1,27 @@
 import React, {Component} from 'react';
+import { StyleSheet, Text, View, TouchableOpacity, Image } from 'react-native';
 import SplashScreen from 'react-native-splash-screen'
-import Icon from 'react-native-vector-icons/Feather';
-import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import {
   Colors,
   Home,
-  Map,
   Setting,
   About,
   Feedback,
   Library,
+  Map,
+  IconInformation,
 } from './components';
 
 const Stack = createStackNavigator();
 
-export default class example extends Component {
+export default class wind extends Component {
   componentDidMount() {
-    // 1.5초 뒤 Splash 닫기
+    // 1초 뒤 Splash 닫기
     setTimeout(() => {
       SplashScreen.hide()
-    }, 1200);
+    }, 1000);
   }
 
   render() {
@@ -34,18 +34,22 @@ export default class example extends Component {
             options={({ navigation, route }) => ({
               title: '',
               headerStyle: styles.header,
-              headerTintColor: Colors.lighter,
+              headerTintColor: Colors.black,
               headerTitleStyle: {
                 fontWeight: 'bold',
               },
               headerLeft: () => (
                 <View style={{
                   flexDirection: "row",
+                  alignItems: 'center',
                   justifyContent: "flex-end",
                   marginLeft: 10,
                   }}
                 >
-                  <Icon name="wind" size={24} color={Colors.lighter} />
+                  <Image
+                    style={{width: 50, height: 50}}
+                    source={require('./components/images/home_image.png')}
+                  />
                   <Text style={styles.title}>순풍순풍</Text>
                 </View>
               ),
@@ -59,10 +63,25 @@ export default class example extends Component {
                   <TouchableOpacity
                     onPress={() => navigation.navigate('Setting')}
                     >
-                    <Icon name="settings" size={24} color={Colors.lighter} />
+                    <Image
+                      style={{width: 40, height: 40}}
+                      source={require('./components/images/crankset.png')}
+                    />
                   </TouchableOpacity>
                 </View>
               ),
+            })}
+          />
+          <Stack.Screen 
+            name="Setting" 
+            component={Setting}
+            options={({ navigation, route }) => ({
+              title: 'Setting',
+              headerStyle: styles.header,
+              headerTintColor: Colors.black,
+              headerTitleStyle: {
+                fontWeight: 'bold',
+              },
             })}
           />
           <Stack.Screen 
@@ -71,18 +90,36 @@ export default class example extends Component {
             options={({ navigation, route }) => ({
               title: '',
               headerStyle: styles.header,
-              headerTintColor: Colors.lighter,
+              headerTintColor: Colors.black,
               headerTitleStyle: {
                 fontWeight: 'bold',
               },
+              headerRight: () => (
+                <View style={{
+                  flexDirection: "row",
+                  justifyContent: "flex-end",
+                  marginRight: 10,
+                  }}
+                >
+                  <TouchableOpacity
+                    onPress={() => navigation.navigate('IconInformation')}
+                    >
+                    <Image
+                      style={{width: 30, height: 30}}
+                      source={require('./components/images/information.png')}
+                    />
+                  </TouchableOpacity>
+                </View>
+              ),
             })}
           />
           <Stack.Screen 
-            name="Setting" 
-            component={Setting}
+            name="IconInformation" 
+            component={IconInformation}
             options={({ navigation, route }) => ({
+              title: '바람/날씨기호 설명',
               headerStyle: styles.header,
-              headerTintColor: Colors.lighter,
+              headerTintColor: Colors.black,
               headerTitleStyle: {
                 fontWeight: 'bold',
               },
@@ -92,8 +129,9 @@ export default class example extends Component {
             name="About" 
             component={About}
             options={({ navigation, route }) => ({
+              title: 'About',
               headerStyle: styles.header,
-              headerTintColor: Colors.lighter,
+              headerTintColor: Colors.black,
               headerTitleStyle: {
                 fontWeight: 'bold',
               },
@@ -103,8 +141,9 @@ export default class example extends Component {
             name="Feedback" 
             component={Feedback}
             options={({ navigation, route }) => ({
+              title: '피드백 보내기',
               headerStyle: styles.header,
-              headerTintColor: Colors.lighter,
+              headerTintColor: Colors.black,
               headerTitleStyle: {
                 fontWeight: 'bold',
               },
@@ -114,8 +153,9 @@ export default class example extends Component {
             name="Library" 
             component={Library}
             options={({ navigation, route }) => ({
+              title: '사용 라이브러리',
               headerStyle: styles.header,
-              headerTintColor: Colors.lighter,
+              headerTintColor: Colors.black,
               headerTitleStyle: {
                 fontWeight: 'bold',
               },
@@ -129,13 +169,13 @@ export default class example extends Component {
 
 const styles = StyleSheet.create({
   header: {
-    backgroundColor: Colors.peter_river,
+    backgroundColor: Colors.white,
   },
   title: {
     fontWeight: '600',
-    fontSize: 20,
+    fontSize: 24,
     fontWeight: 'bold',
-    color: Colors.lighter,
+    color: Colors.black,
     marginLeft: 4,
   },
 });

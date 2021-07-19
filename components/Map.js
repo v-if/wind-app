@@ -1,14 +1,44 @@
-import Svg, { Image, } from 'react-native-svg';
 import React, {Component} from 'react';
-import PropTypes from 'prop-types';
-import { TouchableOpacity, StyleSheet, View, Text, Dimensions, ActivityIndicator } from 'react-native';
-import Slider from "react-native-slider";
+import { TouchableOpacity, StyleSheet, View, Text, Dimensions, Image } from 'react-native';
+import Slider from '@react-native-community/slider';
 import Colors from './Colors';
+import PropTypes from 'prop-types';
 import MapView, {
   Marker,
   ProviderPropType,
   Callout,
 } from 'react-native-maps';
+
+import imageN from './images/N.png';
+import imageNE from './images/NE.png';
+import imageNNE from './images/NNE.png';
+import imageNW from './images/NW.png';
+import imageNNW from './images/NNW.png';
+import imageS from './images/S.png';
+import imageSE from './images/SE.png';
+import imageSSE from './images/SSE.png';
+import imageSW from './images/SW.png';
+import imageSSW from './images/SSW.png';
+import imageE from './images/E.png';
+import imageENE from './images/ENE.png';
+import imageESE from './images/ESE.png';
+import imageW from './images/W.png';
+import imageWSW from './images/WSW.png';
+import imageWNW from './images/WNW.png';
+
+import imageDB01 from './images/DB01.jpg';
+import imageDB01_N from './images/DB01_N.jpg';
+import imageDB03 from './images/DB03.jpg';
+import imageDB03_N from './images/DB03_N.jpg';
+import imageDB04 from './images/DB04.jpg';
+import imageDB04_N from './images/DB04_N.jpg';
+import imageDB05 from './images/DB05.jpg';
+import imageDB06 from './images/DB06.jpg';
+import imageDB08 from './images/DB08.jpg';
+import imageDB09 from './images/DB09.jpg';
+import imageDB10 from './images/DB10.jpg';
+import imageDB11 from './images/DB11.jpg';
+import imageDB12 from './images/DB12.jpg';
 
 const _ = require('lodash')
 
@@ -19,30 +49,6 @@ const LATITUDE = 37.4881455;
 const LONGITUDE = 126.8749689;
 const LATITUDE_DELTA = 0.0622;
 const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
-let id = 0;
-
-function getPty(val) {
-  let state = ''
-
-  if(val == '0') {
-    state = '없음'
-  } else if(val == '1') {
-    state = '비'
-  } else if(val == '2') {
-    state = '비/눈'
-  } else if(val == '3') {
-    state = '눈'
-  } else if(val == '4') {
-    state = '소나기'
-  } else if(val == '5') {
-    state = '빗방울'
-  } else if(val == '6') {
-    state = '빗방울/눈날림'
-  } else if(val == '7') {
-    state = '눈날림'
-  }
-  return state
-}
 
 function getRn1(val) {
   let state = ''
@@ -68,34 +74,174 @@ function getRn1(val) {
   return state
 }
 
-function getSky(val) {
-  let state = ''
+class WindMarker extends React.Component {
 
-  if(val = '1') {
-    state = '맑음'
-  } else if(val = '3') {
-    state = '구름많음'
-  } else if(val = '4') {
-    state = '흐림'
+  render() {
+    const { info } = this.props;
+    let image = null
+    let wsNm = ''
+
+    let direction = info.wd16.substring(0, 1)
+    if(direction == 'N') {
+      if(info.wd16 == 'N') {
+        image = imageN
+        wsNm = '북'
+      } else if(info.wd16 == 'NE') {
+        image = imageNE
+        wsNm = '북동'
+      } else if(info.wd16 == 'NNE') {
+        image = imageNNE
+        wsNm = '북북동'
+      } else if(info.wd16 == 'NW') {
+        image = imageNW
+        wsNm = '북서'
+      } else if(info.wd16 == 'NNW') {
+        image = imageNNW
+        wsNm = '북북서'
+      }
+    } else if(direction == 'S') {
+      if(info.wd16 == 'S') {
+        image = imageS
+        wsNm = '남'
+      } else if(info.wd16 == 'SE') {
+        image = imageSE
+        wsNm = '남동'
+      } else if(info.wd16 == 'SSE') {
+        image = imageSSE
+        wsNm = '남남동'
+      } else if(info.wd16 == 'SW') {
+        image = imageSW
+        wsNm = '남서'
+      } else if(info.wd16 == 'SSW') {
+        image = imageSSW
+        wsNm = '남남서'
+      } 
+    } else if(direction == 'E') {
+      if(info.wd16 == 'E') {
+        image = imageE
+        wsNm = '동'
+      } else if(info.wd16 == 'ENE') {
+        image = imageENE
+        wsNm = '동북동'
+      } else if(info.wd16 == 'ESE') {
+        image = imageESE
+        wsNm = '동남동'
+      }
+    } else if(direction == 'W') {
+      if(info.wd16 == 'W') {
+        image = imageW
+        wsNm = '서'
+      } else if(info.wd16 == 'WSW') {
+        image = imageWSW
+        wsNm = '서남서'
+      } else if(info.wd16 == 'WNW') {
+        image = imageWNW
+        wsNm = '서북서'
+      } 
+    }
+
+    console.log('wind marker:'+info.id)
+
+    return (
+      <View style={styles.markerWrap}>
+        <View style={styles.markerWrapItem}>
+          <Image 
+            style={styles.markerImage}
+            source={image}
+          />
+          <Text>{wsNm}</Text>
+          <Text>({info.wsd}m/s)</Text>
+        </View>
+      </View>
+    );
   }
-  return state
 }
 
-function getWsd(val) {
-  let state = ''
-  let n = parseFloat(val)
+WindMarker.propTypes = {
+  info: PropTypes.object,
+};
 
-  if(n < 4.0) {
-    state = '바람이 약하다'
-  } else if(n >= 4.0 && n < 9.0) {
-    state = '바람이 약간 강하다'
-  } else if(n >= 9.0 && n < 14.0) {
-    state = '바람이 강하다'
-  } else if(n >= 14.0) {
-    state = '바람이 매우 강하다'
+class RainMarker extends React.Component {
+
+  render() {
+    const { info } = this.props;
+
+    let currentTime = info.forecastTime.substring(8, 12)
+
+    let image, skyNm
+    let skyDesc = ''
+    if(info.pty == '0') {
+      if(currentTime >= '0600' && currentTime <= '2000') {
+        if(info.sky == '1') {
+          image = imageDB01
+          skyNm = '맑음'
+        } else if(info.sky == '3') {
+          image = imageDB03
+          skyNm = '구름많음'
+        } else if(info.sky == '4') {
+          image = imageDB04
+          skyNm = '흐림'
+        }
+      } else {
+        if(info.sky == '1') {
+          image = imagesDB01_N
+          skyNm = '맑음'
+        } else if(info.sky == '3') {
+          image = imageDB03_N
+          skyNm = '구름많음'
+        } else if(info.sky == '4') {
+          image = imageDB04_N
+          skyNm = '흐림'
+        }
+      }
+    } else if(info.pty == '1') {
+      image = imageDB05
+      skyNm = '비'
+      skyDesc = getRn1(info.rn1)
+    } else if(info.pty == '2') {
+      image = imageDB06
+      skyNm = '비/눈'
+      skyDesc = getRn1(info.rn1)
+    } else if(info.pty == '3') {
+      image = imageDB08
+      skyNm = '눈'
+      skyDesc = getRn1(info.rn1)
+    } else if(info.pty == '4') {
+      image = imageDB09
+      skyNm = '소나기'
+      skyDesc = getRn1(info.rn1)
+    } else if(info.pty == '5') {
+      image = imageDB10
+      skyNm = '빗방울'
+      skyDesc = getRn1(info.rn1)
+    } else if(info.pty == '6') {
+      image = imageDB11
+      skyNm = '빗방울/눈날림'
+      skyDesc = getRn1(info.rn1)
+    } else if(info.pty == '7') {
+      image = imageDB12
+      skyNm = '눈날림'
+      skyDesc = getRn1(info.rn1)
+    }
+
+    return (
+      <View style={styles.markerWrap}>
+        <View style={styles.markerWrapItem}>
+          <Image 
+            style={styles.markerImage}
+            source={image}
+          />
+          {skyDesc == '' ? <Text>{skyNm}</Text> : <View style={styles.markerWrapItem}><Text>{skyNm}</Text><Text>{skyDesc}</Text></View>}
+          <Text>{info.t1h}℃</Text>
+        </View>
+      </View>
+    );
   }
-  return state
 }
+
+RainMarker.propTypes = {
+  info: PropTypes.object,
+};
 
 class WindCallout extends React.Component {
 
@@ -120,249 +266,6 @@ WindCallout.propTypes = {
   info: PropTypes.object,
 };
 
-class WindMarker extends React.Component {
-
-  render() {
-    const { info } = this.props;
-    let image, wsNm
-
-    let direction = info.wd16.substring(0, 1)
-    if(direction == 'N') {
-      if(info.wd16 == 'N') {
-        image = require('./images/N.png')
-        wsNm = '북'
-      } else if(info.wd16 == 'NE') {
-        image = require('./images/NE.png')
-        wsNm = '북동'
-      } else if(info.wd16 == 'NNE') {
-        image = require('./images/NNE.png')
-        wsNm = '북북동'
-      } else if(info.wd16 == 'NW') {
-        image = require('./images/NW.png')
-        wsNm = '북서'
-      } else if(info.wd16 == 'NNW') {
-        image = require('./images/NNW.png')
-        wsNm = '북북서'
-      }
-    } else if(direction == 'S') {
-      if(info.wd16 == 'S') {
-        image = require('./images/S.png')
-        wsNm = '남'
-      } else if(info.wd16 == 'SE') {
-        image = require('./images/SE.png')
-        wsNm = '남동'
-      } else if(info.wd16 == 'SSE') {
-        image = require('./images/SSE.png')
-        wsNm = '남남동'
-      } else if(info.wd16 == 'SW') {
-        image = require('./images/SW.png')
-        wsNm = '남서'
-      } else if(info.wd16 == 'SSW') {
-        image = require('./images/SSW.png')
-        wsNm = '남남서'
-      } 
-    } else if(direction == 'E') {
-      if(info.wd16 == 'E') {
-        image = require('./images/E.png')
-        wsNm = '동'
-      } else if(info.wd16 == 'ENE') {
-        image = require('./images/ENE.png')
-        wsNm = '동북동'
-      } else if(info.wd16 == 'ESE') {
-        image = require('./images/ESE.png')
-        wsNm = '동남동'
-      }
-    } else if(direction == 'W') {
-      if(info.wd16 == 'W') {
-        image = require('./images/W.png')
-        wsNm = '서'
-      } else if(info.wd16 == 'WSW') {
-        image = require('./images/WSW.png')
-        wsNm = '서남서'
-      } else if(info.wd16 == 'WNW') {
-        image = require('./images/WNW.png')
-        wsNm = '서북서'
-      } 
-    }
-
-    return (
-      <View style={styles.markerWrap}>
-        <View style={styles.markerWrapItem}>
-          <Svg height="30" width="30">
-            <Image
-              width="100%"
-              height="100%"
-              href={image}
-            />
-          </Svg>
-          <Text>{wsNm}</Text>
-          <Text>({info.wsd}m/s)</Text>
-        </View>
-      </View>
-    );
-  }
-}
-
-WindMarker.propTypes = {
-  info: PropTypes.object,
-};
-
-class RainMarker extends React.Component {
-
-  render() {
-    const { info } = this.props;
-
-    let currentTime = info.forecastTime.substring(8, 12)
-
-    let image, skyNm
-    if(info.pty == '0') {
-      if(currentTime >= '0600' && currentTime <= '2000') {
-        if(info.sky == '1') {
-          image = require('./images/DB01.png')
-          skyNm = '맑음'
-        } else if(info.sky == '3') {
-          image = require('./images/DB03.png')
-          skyNm = '구름많음'
-        } else if(info.sky == '4') {
-          image = require('./images/DB04.png')
-          skyNm = '흐림'
-        }
-      } else {
-        if(info.sky == '1') {
-          image = require('./images/DB01_N.png')
-          skyNm = '맑음'
-        } else if(info.sky == '3') {
-          image = require('./images/DB03_N.png')
-          skyNm = '구름많음'
-        } else if(info.sky == '4') {
-          image = require('./images/DB04_N.png')
-          skyNm = '흐림'
-        }
-      }
-    } else if(info.pty == '1') {
-      image = require('./images/DB05.png')
-      skyNm = '비' + '(' + getRn1(info.rn1) + ')'
-    } else if(info.pty == '2') {
-      image = require('./images/DB06.png')
-      skyNm = '비/눈' + '(' + getRn1(info.rn1) + ')'
-    } else if(info.pty == '3') {
-      image = require('./images/DB08.png')
-      skyNm = '눈' + '(' + getRn1(info.rn1) + ')'
-    } else if(info.pty == '4') {
-      image = require('./images/DB09.png')
-      skyNm = '소나기' + '(' + getRn1(info.rn1) + ')'
-    } else if(info.pty == '5') {
-      image = require('./images/DB10.png')
-      skyNm = '빗방울' + '(' + getRn1(info.rn1) + ')'
-    } else if(info.pty == '6') {
-      image = require('./images/DB11.png')
-      skyNm = '빗방울/눈날림' + '(' + getRn1(info.rn1) + ')'
-    } else if(info.pty == '7') {
-      image = require('./images/DB12.png')
-      skyNm = '눈날림' + '(' + getRn1(info.rn1) + ')'
-    }
-
-    return (
-      <View style={styles.markerWrap}>
-        <View style={styles.markerWrapItem}>
-          <Svg height="30" width="30">
-            <Image
-              width="100%"
-              height="100%"
-              href={image}
-            />
-          </Svg>
-          <Text>{skyNm}</Text>
-          <Text>{info.t1h}℃</Text>
-        </View>
-      </View>
-    );
-  }
-}
-
-RainMarker.propTypes = {
-  info: PropTypes.object,
-};
-
-class TempMarker extends React.Component {
-
-  render() {
-    const { info } = this.props;
-
-    let currentTime = info.forecastTime.substring(8, 12)
-
-    let image, skyNm
-    // 낮 : 06:00 ~ 20:00
-    // 밤 : 20:00 ~ 05:00
-    if(info.pty == '0') {
-      if(currentTime >= '0600' && currentTime <= '2000') {
-        if(info.sky == '1') {
-          image = require('./images/DB01.png')
-          skyNm = '맑음'
-        } else if(info.sky == '3') {
-          image = require('./images/DB03.png')
-          skyNm = '구름많음'
-        } else if(info.sky == '4') {
-          image = require('./images/DB04.png')
-          skyNm = '흐림'
-        }
-      } else {
-        if(info.sky == '1') {
-          image = require('./images/DB01_N.png')
-          skyNm = '맑음'
-        } else if(info.sky == '3') {
-          image = require('./images/DB03_N.png')
-          skyNm = '구름많음'
-        } else if(info.sky == '4') {
-          image = require('./images/DB04_N.png')
-          skyNm = '흐림'
-        }
-      }
-    } else if(info.pty == '1') {
-      image = require('./images/DB05.png')
-      skyNm = '비'
-    } else if(info.pty == '2') {
-      image = require('./images/DB06.png')
-      skyNm = '비/눈'
-    } else if(info.pty == '3') {
-      image = require('./images/DB08.png')
-      skyNm = '눈'
-    } else if(info.pty == '4') {
-      image = require('./images/DB09.png')
-      skyNm = '소나기'
-    } else if(info.pty == '5') {
-      image = require('./images/DB10.png')
-      skyNm = '빗방울'
-    } else if(info.pty == '6') {
-      image = require('./images/DB11.png')
-      skyNm = '빗방울/눈날림'
-    } else if(info.pty == '7') {
-      image = require('./images/DB12.png')
-      skyNm = '눈날림'
-    }
-
-    return (
-      <View style={styles.markerWrap}>
-        <View style={styles.markerWrapItem}>
-          <Svg height="30" width="30">
-            <Image
-              width="100%"
-              height="100%"
-              href={image}
-            />
-          </Svg>
-          <Text>{skyNm}</Text>
-          <Text>{info.t1h}℃</Text>
-        </View>
-      </View>
-    );
-  }
-}
-
-TempMarker.propTypes = {
-  info: PropTypes.object,
-};
-
 class Map extends Component {
   constructor(props) {
     super(props);
@@ -379,7 +282,7 @@ class Map extends Component {
       timeSeq: 0,
       data: [],
       tp: 'wind',
-      isLoading: false,
+      isLoading: true,
     };
   }
 
@@ -393,11 +296,14 @@ class Map extends Component {
     })
 
     let data = _.orderBy(merge, ['timezone'], ['asc'])
+    console.log(data)
 
-    if(this.state.time == '') {
-      this.setState({data: data, time: data['0'].timezone})
-    } else {
-      this.setState({data: data})
+    if(data.length > 0) {
+      if(this.state.time == '') {
+        this.setState({data: data, time: data['0'].timezone, isLoading: false})
+      } else {
+        this.setState({data: data, isLoading: false})
+      }
     }
   }
 
@@ -472,6 +378,7 @@ class Map extends Component {
             .filter(data => data.timezone == this.state.time)
             .map(data => {
               return data.marker.map(marker => {
+                console.log('marker loop !')
                 return <Marker
                   key={marker.id}
                   info={marker}
@@ -484,7 +391,8 @@ class Map extends Component {
                   <WindCallout key={'callout'+marker.id} info={marker} />
                 </Marker>
               })
-            })}
+            })
+          }
         </MapView>
         <View style={styles.buttonContainer}>
           <View style={styles.buttonWrap}>
@@ -504,10 +412,41 @@ class Map extends Component {
                 <Text style={this.state.tp == 'rain' ? styles.bubbleFontSeleted : styles.bubbleFont}>날씨</Text>
               </View>
             </TouchableOpacity>
+            <View>
+              <Image style={styles.markerImage} source={imageN} />
+              <Image style={styles.markerImage} source={imageNE} />
+              <Image style={styles.markerImage} source={imageNNE} />
+              <Image style={styles.markerImage} source={imageNW} />
+              <Image style={styles.markerImage} source={imageNNW} />
+              <Image style={styles.markerImage} source={imageS} />
+              <Image style={styles.markerImage} source={imageSE} />
+              <Image style={styles.markerImage} source={imageSSE} />
+              <Image style={styles.markerImage} source={imageSW} />
+              <Image style={styles.markerImage} source={imageSSW} />
+              <Image style={styles.markerImage} source={imageE} />
+              <Image style={styles.markerImage} source={imageENE} />
+              <Image style={styles.markerImage} source={imageESE} />
+              <Image style={styles.markerImage} source={imageW} />
+              <Image style={styles.markerImage} source={imageWSW} />
+              <Image style={styles.markerImage} source={imageWNW} />
+              <Image style={styles.markerImage} source={imageDB01} />
+              <Image style={styles.markerImage} source={imageDB01_N} />
+              <Image style={styles.markerImage} source={imageDB03} />
+              <Image style={styles.markerImage} source={imageDB03_N} />
+              <Image style={styles.markerImage} source={imageDB04} />
+              <Image style={styles.markerImage} source={imageDB04_N} />
+              <Image style={styles.markerImage} source={imageDB05} />
+              <Image style={styles.markerImage} source={imageDB06} />
+              <Image style={styles.markerImage} source={imageDB08} />
+              <Image style={styles.markerImage} source={imageDB09} />
+              <Image style={styles.markerImage} source={imageDB10} />
+              <Image style={styles.markerImage} source={imageDB11} />
+              <Image style={styles.markerImage} source={imageDB12} />
+            </View>
           </View>
         </View>
         <View style={styles.indicatorContainer}>
-          {this.state.isLoading ? <ActivityIndicator/> : <View></View> }
+          {this.state.isLoading ? <Image style={{width: 300, height: 300}} source={require('./images/loading.gif')} /> : <View></View> }
         </View>
         <View style={styles.timezoneContainer}>
           {this.state.data.length > 0 ? 
@@ -555,7 +494,7 @@ const styles = StyleSheet.create({
   container: {
     ...StyleSheet.absoluteFillObject,
     flex: 1,
-    backgroundColor: Colors.black,
+    backgroundColor: Colors.white,
     flexDirection: 'column',
   },
   markerWrap: {
@@ -577,8 +516,8 @@ const styles = StyleSheet.create({
   markerImage: {
     flex: 1, 
     width: 30, 
-    height: 30, 
-    transform: [{ scale: 0.8 }]
+    height: 30,
+    resizeMode:'cover' 
   },
   indicatorContainer: {
     flex: 1,
@@ -673,6 +612,12 @@ const styles = StyleSheet.create({
   },
   slider: {
     flex: 1,
+  },
+  button1Container: {
+    backgroundColor: Colors.balck,
+    width: 63,
+    alignItems: 'flex-end',
+    justifyContent: 'flex-start',
   },
   buttonContainer: {
     flex: 1,
