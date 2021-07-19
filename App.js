@@ -47,10 +47,9 @@ export default class wind extends Component {
                   }}
                 >
                   <Image
-                    style={{width: 50, height: 50}}
-                    source={require('./components/images/home_image.png')}
+                    style={{width: 145, height: 34}}
+                    source={require('./components/images/home.jpg')}
                   />
-                  <Text style={styles.title}>순풍순풍</Text>
                 </View>
               ),
               headerRight: () => (

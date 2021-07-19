@@ -9,6 +9,58 @@ export default function IconInformation({ navigation }) {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>바람 16방위</Text>
+      <View style={styles.header}>
+        <View style={styles.column}>
+          <Text>바람기호</Text>
+        </View>
+        <View style={styles.column}>
+          <Text>설명</Text>
+        </View>
+        <View style={styles.column}>
+          <Text>바람기호</Text>
+        </View>
+        <View style={styles.column}>
+          <Text>설명</Text>
+        </View>
+      </View>
+
+      <View style={styles.row}>
+        <View style={styles.column}>
+          <Image
+            style={styles.image}
+            source={require('./images/S_1.png')}
+          />
+        </View>
+        <View style={styles.column}>
+          <Text>풍속 4m/s미만</Text>
+        </View>
+        <View style={styles.column}>
+          <Image
+            style={styles.image}
+            source={require('./images/S_2.png')}
+          />
+        </View>
+        <View style={styles.column}>
+          <Text>풍속 4m/s이상 9m/s미만</Text>
+        </View>
+      </View>
+
+      <View style={styles.row}>
+        <View style={styles.column}>
+          <Image
+            style={styles.image}
+            source={require('./images/S_3.png')}
+          />
+        </View>
+        <View style={styles.column}>
+          <Text>풍속 9m/s이상</Text>
+        </View>
+        <View style={styles.column}>
+        </View>
+        <View style={styles.column}>
+        </View>
+      </View>
+
       <Image
         style={{width: width, height: 250, marginTop: 4, resizeMode: 'stretch',}}
         source={require('./images/wind16.jpg')}
