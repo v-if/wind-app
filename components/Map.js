@@ -140,8 +140,6 @@ class WindMarker extends React.Component {
       } 
     }
 
-    console.log('wind marker:'+info.id)
-
     return (
       <View style={styles.markerWrap}>
         <View style={styles.markerWrapItem}>
@@ -378,7 +376,6 @@ class Map extends Component {
             .filter(data => data.timezone == this.state.time)
             .map(data => {
               return data.marker.map(marker => {
-                console.log('marker loop !')
                 return <Marker
                   key={marker.id}
                   info={marker}
