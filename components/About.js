@@ -1,19 +1,20 @@
 import React, { useEffect, useState } from 'react';
-import { Image, Text, View, StyleSheet, Dimensions  } from 'react-native';
+import { Image, Text, View, StyleSheet, Dimensions, SafeAreaView, ScrollView  } from 'react-native';
 import Colors from './Colors';
 import packageJson from './../package.json';
 
 export default function About({ navigation }) {
 
-  // https://www.instagram.com/sunpungx2/
-  // https://www.naver.com/sunpungx2/
+  // https://stackoverflow.com/a/48650614
 
-  var {height, width} = Dimensions.get('window');
+  const win = Dimensions.get('window');
+  // image 1(1067 x 683)
+  const ratio = win.width/1067; //1019 is actual image width
 
   return (
     <View style={styles.container}>
       <Image
-        style={{width: width, height: 250, marginTop: 4}}
+        style={{ width:win.width, height:683*ratio, marginTop: 4 }}
         source={require('./images/about.jpg')}
       />
       <Text>이 앱은 라이더들을 위해 만들어졌습니다.</Text>
@@ -36,4 +37,5 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: Colors.white,
   },
+
 });

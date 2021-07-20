@@ -522,7 +522,7 @@ class Map extends Component {
             {this.state.data.map(data => {
               return <View 
                   key={data.timezone}
-                  style={this.state.time == data.timezone ? styles.timezoneSeleted : styles.timezone}
+                  style={styles.timezone}
                 >
                 <Text style={this.state.time == data.timezone ? styles.timezoneFontSeleted : styles.timezoneFont}>
                   {data.timezone.substring(8, 10)}:{data.timezone.substring(10, 12)}
@@ -574,17 +574,14 @@ const styles = StyleSheet.create({
     resizeMode:'cover' 
   },
   indicatorContainer: {
-    flex: 1,
-    backgroundColor: Colors.transform,
+    flex: 2,
     alignItems: 'center', 
     justifyContent: 'center',
   },
   timezoneContainer: {
     flex: 1,
-    backgroundColor: Colors.transform,
     alignItems: 'center',
     justifyContent: 'flex-end',
-    borderRadius: 10,
     padding: 10,
   },
   timezoneWrap: {
@@ -637,12 +634,6 @@ const styles = StyleSheet.create({
   },
   timezone: {
     flex: 1,
-    backgroundColor: Colors.transform,
-    alignItems: 'center',
-  },
-  timezoneSeleted: {
-    flex: 1,
-    backgroundColor: Colors.transform,
     alignItems: 'center',
   },
   timezoneFont: {
@@ -667,18 +658,11 @@ const styles = StyleSheet.create({
   slider: {
     flex: 1,
   },
-  button1Container: {
-    backgroundColor: Colors.balck,
-    width: 63,
-    alignItems: 'flex-end',
-    justifyContent: 'flex-start',
-  },
   buttonContainer: {
     flex: 1,
-    backgroundColor: Colors.transform,
     alignItems: 'flex-end',
     justifyContent: 'flex-start',
-    margin: 10,
+    padding: 10,
   },
   buttonWrap: {
     width: 63,
