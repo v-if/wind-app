@@ -214,7 +214,7 @@ class RainMarker extends React.Component {
         }
       } else {
         if(info.sky == '1') {
-          image = imagesDB01_N
+          image = imageDB01_N
           skyNm = '맑음'
         } else if(info.sky == '3') {
           image = imageDB03_N
@@ -513,7 +513,7 @@ class Map extends Component {
           {this.state.data.length > 0 ? 
             <View style={[styles.sliderWrap, this.state.data.length == 0 ? styles.padding10 : this.state.data.length == 6 ? styles.padding20 : this.state.data.length == 5 ? styles.padding30 : styles.padding40]}>
               <Slider
-                // https://github.com/jeanregisser/react-native-slider
+                // https://github.com/callstack/react-native-slider
                 style={styles.slider}
                 value={this.state.timeSeq}
                 minimumValue={0}
@@ -526,15 +526,14 @@ class Map extends Component {
           }
           <View style={styles.timezoneWrap}>
             {this.state.data.map(data => {
-              return <TouchableOpacity 
-              key={data.timezone}
-              style={this.state.time == data.timezone ? styles.timezoneSeleted : styles.timezone}
-                onPress={() => this.onTimezoneButtonPress(data.timezone)}
+              return <View 
+                  key={data.timezone}
+                  style={this.state.time == data.timezone ? styles.timezoneSeleted : styles.timezone}
                 >
                 <Text style={this.state.time == data.timezone ? styles.timezoneFontSeleted : styles.timezoneFont}>
                   {data.timezone.substring(8, 10)}:{data.timezone.substring(10, 12)}
                 </Text>
-              </TouchableOpacity>
+              </View>
             })}
           </View>
         </View>

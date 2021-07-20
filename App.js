@@ -47,7 +47,7 @@ export default class wind extends Component {
                   }}
                 >
                   <Image
-                    style={{width: 145, height: 34}}
+                    style={{width: 135, height: 34}}
                     source={require('./components/images/home.jpg')}
                   />
                 </View>
@@ -104,7 +104,7 @@ export default class wind extends Component {
                     onPress={() => navigation.navigate('IconInformation')}
                     >
                     <Image
-                      style={{width: 30, height: 30}}
+                      style={{width: 28, height: 28}}
                       source={require('./components/images/information.png')}
                     />
                   </TouchableOpacity>

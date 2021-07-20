@@ -61,11 +61,6 @@ export default function IconInformation({ navigation }) {
         </View>
       </View>
 
-      <Image
-        style={{width: width, height: 250, marginTop: 4, resizeMode: 'stretch',}}
-        source={require('./images/wind16.jpg')}
-      />
-
       <Text style={styles.title}>날씨기호 설명</Text>
       <View style={styles.header}>
         <View style={styles.column}>
