@@ -1,216 +1,40 @@
 import React, { useEffect, useState } from 'react';
-import { Image, Text, View, StyleSheet, Dimensions } from 'react-native';
+import { Image, Text, View, StyleSheet, Dimensions, SafeAreaView, ScrollView } from 'react-native';
 import Colors from './Colors';
 
 export default function IconInformation({ navigation }) {
 
-  var {height, width} = Dimensions.get('window');
+  // https://stackoverflow.com/a/48650614
+
+  const win = Dimensions.get('window');
+  // image 1(1019 x 1440)
+  const ratio = win.width/1019; //1019 is actual image width
+
+  // image 2(905 x 1280)
+  const ratio2 = win.width/905; //905 is actual image width
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>바람 16방위</Text>
-      <View style={styles.header}>
-        <View style={styles.column}>
-          <Text>바람기호</Text>
-        </View>
-        <View style={styles.column}>
-          <Text>설명</Text>
-        </View>
-        <View style={styles.column}>
-          <Text>바람기호</Text>
-        </View>
-        <View style={styles.column}>
-          <Text>설명</Text>
-        </View>
-      </View>
-
-      <View style={styles.row}>
-        <View style={styles.column}>
-          <Image
-            style={styles.image}
-            source={require('./images/S_1.png')}
-          />
-        </View>
-        <View style={styles.column}>
-          <Text>풍속 4m/s미만</Text>
-        </View>
-        <View style={styles.column}>
-          <Image
-            style={styles.image}
-            source={require('./images/S_2.png')}
-          />
-        </View>
-        <View style={styles.column}>
-          <Text>풍속 4m/s이상 9m/s미만</Text>
-        </View>
-      </View>
-
-      <View style={styles.row}>
-        <View style={styles.column}>
-          <Image
-            style={styles.image}
-            source={require('./images/S_3.png')}
-          />
-        </View>
-        <View style={styles.column}>
-          <Text>풍속 9m/s이상</Text>
-        </View>
-        <View style={styles.column}>
-        </View>
-        <View style={styles.column}>
-        </View>
-      </View>
-
-      <Text style={styles.title}>날씨기호 설명</Text>
-      <View style={styles.header}>
-        <View style={styles.column}>
-          <Text>날씨기호</Text>
-        </View>
-        <View style={styles.column}>
-          <Text>설명</Text>
-        </View>
-        <View style={styles.column}>
-          <Text>날씨기호</Text>
-        </View>
-        <View style={styles.column}>
-          <Text>설명</Text>
-        </View>
-      </View>
-
-      <View style={styles.row}>
-        <View style={styles.column}>
-          <Image
-            style={styles.image}
-            source={require('./images/DB01.jpg')}
-          />
-        </View>
-        <View style={styles.column}>
-          <Text>맑음</Text>
-        </View>
-        <View style={styles.column}>
-          <Image
-            style={styles.image}
-            source={require('./images/DB01_N.jpg')}
-          />
-        </View>
-        <View style={styles.column}>
-          <Text>맑음(밤)</Text>
-        </View>
-      </View>
-
-      <View style={styles.row}>
-        <View style={styles.column}>
-          <Image
-            style={styles.image}
-            source={require('./images/DB03.jpg')}
-          />
-        </View>
-        <View style={styles.column}>
-          <Text>구름많음</Text>
-        </View>
-        <View style={styles.column}>
-          <Image
-            style={styles.image}
-            source={require('./images/DB03_N.jpg')}
-          />
-        </View>
-        <View style={styles.column}>
-          <Text>구름많음(밤)</Text>
-        </View>
-      </View>
-
-      <View style={styles.row}>
-        <View style={styles.column}>
-          <Image
-            style={styles.image}
-            source={require('./images/DB05.jpg')}
-          />
-        </View>
-        <View style={styles.column}>
-          <Text>비</Text>
-        </View>
-        <View style={styles.column}>
-          <Image
-            style={styles.image}
-            source={require('./images/DB08.jpg')}
-          />
-        </View>
-        <View style={styles.column}>
-          <Text>눈</Text>
-        </View>
-      </View>
-
-      <View style={styles.row}>
-        <View style={styles.column}>
-          <Image
-            style={styles.image}
-            source={require('./images/DB04.jpg')}
-          />
-        </View>
-        <View style={styles.column}>
-          <Text>흐림</Text>
-        </View>
-        <View style={styles.column}>
-          <Image
-            style={styles.image}
-            source={require('./images/DB06.jpg')}
-          />
-        </View>
-        <View style={styles.column}>
-          <Text>비 또는 눈</Text>
-        </View>
-      </View>
-
-      <View style={styles.row}>
-        <View style={styles.column}>
-          <Image
-            style={styles.image}
-            source={require('./images/DB09.jpg')}
-          />
-        </View>
-        <View style={styles.column}>
-          <Text>소나기</Text>
-        </View>
-        <View style={styles.column}>
-        </View>
-        <View style={styles.column}>
-        </View>
-      </View>
-
-    </View>
+    <SafeAreaView style={styles.container}>
+      <ScrollView>
+        <Image
+          style={{ width:win.width, height:1440*ratio, marginTop: 10 }}
+          resizeMode='contain'
+          source={require('./images/info_wind2.jpg')}
+        />
+        <Image
+          style={{ width:win.width, height:1280*ratio2 }}
+          resizeMode='contain'
+          source={require('./images/info_weather.jpg')}
+        />
+      </ScrollView>
+    </SafeAreaView >
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: 'center',
     backgroundColor: Colors.white,
-    margin: 4,
-  },
-  title: {
-    fontSize: 20,
-    marginTop: 10,
-  },
-  header: {
-    height: 40,
-    flexDirection: 'row',
-    backgroundColor: Colors.light,
-  },
-  row: {
-    height: 50,
-    flexDirection: 'row',
-    backgroundColor: Colors.white,
-  },
-  column: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    borderColor: Colors.black,
-    borderWidth: 1,
-  },
-  image: {
-    width: 30,
-    height: 30,
+    alignItems: "center",
   },
 });

@@ -63,14 +63,11 @@ import imageDB01_N from './images/DB01_N.jpg';
 import imageDB03 from './images/DB03.jpg';
 import imageDB03_N from './images/DB03_N.jpg';
 import imageDB04 from './images/DB04.jpg';
-import imageDB04_N from './images/DB04_N.jpg';
 import imageDB05 from './images/DB05.jpg';
 import imageDB06 from './images/DB06.jpg';
 import imageDB08 from './images/DB08.jpg';
 import imageDB09 from './images/DB09.jpg';
-import imageDB10 from './images/DB10.jpg';
 import imageDB11 from './images/DB11.jpg';
-import imageDB12 from './images/DB12.jpg';
 
 const _ = require('lodash')
 
@@ -220,7 +217,7 @@ class RainMarker extends React.Component {
           image = imageDB03_N
           skyNm = '구름많음'
         } else if(info.sky == '4') {
-          image = imageDB04_N
+          image = imageDB04
           skyNm = '흐림'
         }
       }
@@ -241,7 +238,7 @@ class RainMarker extends React.Component {
       skyNm = '소나기'
       skyDesc = getRn1(info.rn1)
     } else if(info.pty == '5') {
-      image = imageDB10
+      image = imageDB05
       skyNm = '빗방울'
       skyDesc = getRn1(info.rn1)
     } else if(info.pty == '6') {
@@ -249,7 +246,7 @@ class RainMarker extends React.Component {
       skyNm = '빗방울/눈날림'
       skyDesc = getRn1(info.rn1)
     } else if(info.pty == '7') {
-      image = imageDB12
+      image = imageDB08
       skyNm = '눈날림'
       skyDesc = getRn1(info.rn1)
     }
@@ -495,14 +492,11 @@ class Map extends Component {
               <Image style={styles.markerImage} source={imageDB03} />
               <Image style={styles.markerImage} source={imageDB03_N} />
               <Image style={styles.markerImage} source={imageDB04} />
-              <Image style={styles.markerImage} source={imageDB04_N} />
               <Image style={styles.markerImage} source={imageDB05} />
               <Image style={styles.markerImage} source={imageDB06} />
               <Image style={styles.markerImage} source={imageDB08} />
               <Image style={styles.markerImage} source={imageDB09} />
-              <Image style={styles.markerImage} source={imageDB10} />
               <Image style={styles.markerImage} source={imageDB11} />
-              <Image style={styles.markerImage} source={imageDB12} />
             </View>
           </View>
         </View>
