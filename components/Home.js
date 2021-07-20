@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { TouchableOpacity, Text, View, Image, StyleSheet } from 'react-native';
+import { TouchableOpacity, Text, View, Image, StyleSheet, Platform } from 'react-native';
 import Colors from './Colors';
 import { FlatGrid } from 'react-native-super-grid';
 import { WebView } from 'react-native-webview';
@@ -9,20 +9,28 @@ export default function Home({ navigation }) {
   const [data, setData] = useState([]);
   const [width, setWidth] = useState(10);
   const [height, setHeight] = useState(10);
+
+  function dataProcessing(res) {
+    if(Platform.OS === 'ios') {
+      let filterData = res.filter(function(road) {
+        return road.roadNm != 'ads_cpng'
+      })
+      setData(filterData)
+    } else {
+      setData(res)
+    }
+  }
   
   useEffect(() => {
-
     // 2초 뒤에 api 호출
     setTimeout(() => {
       let url = 'http://118.67.129.162/api/wind/road'
       fetch(url)
         .then((response) => response.json())
-        .then((json) => setData(json.response))
+        .then((json) => dataProcessing(json.response))
         .catch((error) => console.error(error))
         .finally(() => setLoading(false));
     }, 2000);
-
-    
   }, []);
 
   return (
@@ -41,8 +49,8 @@ export default function Home({ navigation }) {
           <WebView
               onLayout={(event) => {
                 var {x, y, width, height} = event.nativeEvent.layout;
-                setWidth(width*0.9)
-                setHeight(height*0.9)
+                setWidth(width * (Platform.OS === 'ios' ? 4 : 0.9))
+                setHeight(height * (Platform.OS === 'ios' ? 4 : 0.9))
               }}
               style={styles.adsWebView}
               scalesPageToFit={false}

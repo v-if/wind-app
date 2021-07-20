@@ -18,10 +18,10 @@ const Stack = createStackNavigator();
 
 export default class wind extends Component {
   componentDidMount() {
-    // 1초 뒤 Splash 닫기
+    // 0.5초 뒤 Splash 닫기
     setTimeout(() => {
       SplashScreen.hide()
-    }, 1000);
+    }, 500);
   }
 
   render() {

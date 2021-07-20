@@ -141,6 +141,7 @@ const styles = StyleSheet.create({
     color: Colors.black,
     textAlign: 'left',
     width: 80,
+    marginLeft: 4,
   },
   label: {
     color: Colors.black,
