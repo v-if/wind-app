@@ -1,21 +1,98 @@
 import React, {Component} from 'react';
 import { TouchableOpacity, StyleSheet, View, Text, Dimensions, ActivityIndicator } from 'react-native';
+import MapView from 'react-native-maps';
 import Colors from './Colors';
 
 class Map extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      prevPos: null,
+      curPos: { latitude: 37.420814, longitude: -122.081949 },
+      curAng: 45,
+      latitudeDelta: 0.0922,
+      longitudeDelta: 0.0421,
+    };
+    this.changePosition = this.changePosition.bind(this);
+    this.getRotation = this.getRotation.bind(this);
+    this.updateMap = this.updateMap.bind(this);
+  }
+
+  changePosition(latOffset, lonOffset) {
+    const latitude = this.state.curPos.latitude + latOffset;
+    const longitude = this.state.curPos.longitude + lonOffset;
+    this.setState({
+      prevPos: this.state.curPos,
+      curPos: { latitude, longitude },
+    });
+    this.updateMap();
+  }
+
+  getRotation(prevPos, curPos) {
+    if (!prevPos) {
+      return 0;
+    }
+    const xDiff = curPos.latitude - prevPos.latitude;
+    const yDiff = curPos.longitude - prevPos.longitude;
+    return (Math.atan2(yDiff, xDiff) * 180.0) / Math.PI;
+  }
+
+  updateMap() {
+    const { curPos, prevPos, curAng } = this.state;
+    const curRot = this.getRotation(prevPos, curPos);
+    this.map.animateCamera({ heading: curRot, center: curPos, pitch: curAng });
+  }
 
   render() {
     return (
-      <View style={styles.container}>
-          <View style={styles.item1}>
-              <Text>1</Text>
-          </View>
-          <View style={styles.item2}>
-              <Text>2</Text>
-          </View>
-          <View style={styles.item3}>
-              <Text>3</Text>
-          </View>
+      <View style={styles.flex}>
+        <MapView
+          ref={el => (this.map = el)}
+          style={styles.flex}
+          minZoomLevel={15}
+          initialRegion={{
+            ...this.state.curPos,
+            latitudeDelta: this.state.latitudeDelta,
+            longitudeDelta: this.state.longitudeDelta,
+          }}
+        >
+        </MapView>
+        <View style={styles.buttonContainerUpDown}>
+          <TouchableOpacity
+            style={[styles.button, styles.up]}
+            onPress={() => this.changePosition(0.0001, 0)}
+          >
+            <Text>+ Lat</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={[styles.button, styles.down]}
+            onPress={() => this.changePosition(-0.0001, 0)}
+          >
+            <Text>- Lat</Text>
+          </TouchableOpacity>
+        </View>
+        <View style={styles.buttonContainerLeftRight}>
+          <TouchableOpacity
+            style={[styles.button, styles.left]}
+            onPress={() => this.changePosition(0, -0.0001)}
+          >
+            <Text>- Lon</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={[styles.button, styles.right]}
+            onPress={() => this.changePosition(0, 0.0001)}
+          >
+            <Text>+ Lon</Text>
+          </TouchableOpacity>
+        </View>
+        <View style={styles.buttonContainerCenter}>
+          <TouchableOpacity
+            style={[styles.button, styles.center]}
+            onPress={() => this.changePosition(0, -0.0001)}
+          >
+            <Text>center</Text>
+          </TouchableOpacity>
+        </View>
       </View>
     );
   }
@@ -23,33 +100,48 @@ class Map extends Component {
 
 
 const styles = StyleSheet.create({
-  container: {
-    ...StyleSheet.absoluteFillObject,
+  flex: {
     flex: 1,
-    backgroundColor: Colors.white,
-    flexDirection:'column',
-    alignItems:'flex-start',
+    width: '100%',
   },
-  item1: {
-    width: 50,
-    height: 50,
-    backgroundColor: Colors.alizarin,
-    alignItems: 'center',
+  buttonContainerUpDown: {
+    ...StyleSheet.absoluteFillObject,
+    flexDirection: 'row',
     justifyContent: 'center',
   },
-  item2: {
-    width: 50,
-    height: 50,
-    backgroundColor: Colors.sun_flower,
-    alignItems: 'center',
+  buttonContainerLeftRight: {
+    ...StyleSheet.absoluteFillObject,
+    flexDirection: 'column',
     justifyContent: 'center',
   },
-  item3: {
-    width: 50,
-    height: 50,
-    backgroundColor: Colors.green_sea,
+  buttonContainerCenter: {
+    ...StyleSheet.absoluteFillObject,
+    flexDirection: 'column',
+    justifyContent: 'center',
+  },
+  button: {
+    backgroundColor: 'rgba(100,100,100,0.2)',
+    position: 'absolute',
     alignItems: 'center',
     justifyContent: 'center',
+    borderRadius: 20,
+    height: 50,
+    width: 50,
+  },
+  up: {
+    alignSelf: 'flex-start',
+  },
+  down: {
+    alignSelf: 'flex-end',
+  },
+  left: {
+    alignSelf: 'flex-start',
+  },
+  right: {
+    alignSelf: 'flex-end',
+  },
+  center: {
+    alignSelf: 'center',
   },
 });
 
