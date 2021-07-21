@@ -323,7 +323,7 @@ class Map extends Component {
     })
 
     let data = _.orderBy(merge, ['timezone'], ['asc'])
-    console.log(data)
+    //console.log(data)
 
     if(data.length > 0) {
       if(this.state.time == '') {
@@ -384,7 +384,7 @@ class Map extends Component {
     const { route } = this.props;
     const { latitude, longitude } = route.params;
 
-    var {height, width} = Dimensions.get('window');
+    const win = Dimensions.get('window');
 
     let region = {
       latitude: parseFloat(latitude),
@@ -397,7 +397,7 @@ class Map extends Component {
       <View style={styles.container}>
         <MapView 
           provider={this.props.provider}
-          style={styles.container}
+          style={styles.map}
           initialRegion={region}
           onRegionChangeComplete={this.onRegionChangeComplete}
         >
@@ -438,74 +438,26 @@ class Map extends Component {
                 <Text style={this.state.tp == 'rain' ? styles.bubbleFontSeleted : styles.bubbleFont}>날씨</Text>
               </View>
             </TouchableOpacity>
-            <View>
-              <Image style={styles.markerImage} source={imageN_1} />
-              <Image style={styles.markerImage} source={imageN_2} />
-              <Image style={styles.markerImage} source={imageN_3} />
-              <Image style={styles.markerImage} source={imageNE_1} />
-              <Image style={styles.markerImage} source={imageNE_2} />
-              <Image style={styles.markerImage} source={imageNE_3} />
-              <Image style={styles.markerImage} source={imageNNE_1} />
-              <Image style={styles.markerImage} source={imageNNE_2} />
-              <Image style={styles.markerImage} source={imageNNE_3} />
-              <Image style={styles.markerImage} source={imageNW_1} />
-              <Image style={styles.markerImage} source={imageNW_2} />
-              <Image style={styles.markerImage} source={imageNW_3} />
-              <Image style={styles.markerImage} source={imageNNW_1} />
-              <Image style={styles.markerImage} source={imageNNW_2} />
-              <Image style={styles.markerImage} source={imageNNW_3} />
-              <Image style={styles.markerImage} source={imageS_1} />
-              <Image style={styles.markerImage} source={imageS_2} />
-              <Image style={styles.markerImage} source={imageS_3} />
-              <Image style={styles.markerImage} source={imageSE_1} />
-              <Image style={styles.markerImage} source={imageSE_2} />
-              <Image style={styles.markerImage} source={imageSE_3} />
-              <Image style={styles.markerImage} source={imageSSE_1} />
-              <Image style={styles.markerImage} source={imageSSE_2} />
-              <Image style={styles.markerImage} source={imageSSE_3} />
-              <Image style={styles.markerImage} source={imageSW_1} />
-              <Image style={styles.markerImage} source={imageSW_2} />
-              <Image style={styles.markerImage} source={imageSW_3} />
-              <Image style={styles.markerImage} source={imageSSW_1} />
-              <Image style={styles.markerImage} source={imageSSW_2} />
-              <Image style={styles.markerImage} source={imageSSW_3} />
-              <Image style={styles.markerImage} source={imageE_1} />
-              <Image style={styles.markerImage} source={imageE_2} />
-              <Image style={styles.markerImage} source={imageE_3} />
-              <Image style={styles.markerImage} source={imageENE_1} />
-              <Image style={styles.markerImage} source={imageENE_2} />
-              <Image style={styles.markerImage} source={imageENE_3} />
-              <Image style={styles.markerImage} source={imageESE_1} />
-              <Image style={styles.markerImage} source={imageESE_2} />
-              <Image style={styles.markerImage} source={imageESE_3} />
-              <Image style={styles.markerImage} source={imageW_1} />
-              <Image style={styles.markerImage} source={imageW_2} />
-              <Image style={styles.markerImage} source={imageW_3} />
-              <Image style={styles.markerImage} source={imageWSW_1} />
-              <Image style={styles.markerImage} source={imageWSW_2} />
-              <Image style={styles.markerImage} source={imageWSW_3} />
-              <Image style={styles.markerImage} source={imageWNW_1} />
-              <Image style={styles.markerImage} source={imageWNW_2} />
-              <Image style={styles.markerImage} source={imageWNW_3} />
-              <Image style={styles.markerImage} source={imageDB01} />
-              <Image style={styles.markerImage} source={imageDB01_N} />
-              <Image style={styles.markerImage} source={imageDB03} />
-              <Image style={styles.markerImage} source={imageDB03_N} />
-              <Image style={styles.markerImage} source={imageDB04} />
-              <Image style={styles.markerImage} source={imageDB05} />
-              <Image style={styles.markerImage} source={imageDB06} />
-              <Image style={styles.markerImage} source={imageDB08} />
-              <Image style={styles.markerImage} source={imageDB09} />
-              <Image style={styles.markerImage} source={imageDB11} />
-            </View>
           </View>
         </View>
-        <View style={styles.indicatorContainer}>
+        <View style={{ position: 'absolute', top: win.width/2 }}>
           {this.state.isLoading ? <Image style={{width: 300, height: 300}} source={require('./images/loading.gif')} /> : <View></View> }
         </View>
         <View style={styles.timezoneContainer}>
           {this.state.data.length > 0 ? 
-            <View style={[styles.sliderWrap, this.state.data.length == 0 ? styles.padding10 : this.state.data.length == 6 ? styles.padding20 : this.state.data.length == 5 ? styles.padding30 : styles.padding40]}>
+            <View style={{
+              width: win.width-20, 
+              height: 30,
+              flexDirection: 'row',
+              opacity: 0.9,
+              backgroundColor: Colors.white,
+              alignItems: 'center',
+              justifyContent: 'flex-end',
+              borderTopLeftRadius: 10,
+              borderTopRightRadius: 10,
+              paddingLeft: this.state.data.length == 0 ? 10 : this.state.data.length == 6 ? 20 : this.state.data.length == 5 ? 30 : 40,
+              paddingRight: this.state.data.length == 0 ? 10 : this.state.data.length == 6 ? 20 : this.state.data.length == 5 ? 30 : 40,
+              }}>
               <Slider
                 // https://github.com/callstack/react-native-slider
                 style={styles.slider}
@@ -531,6 +483,66 @@ class Map extends Component {
             })}
           </View>
         </View>
+        <View style={{width: 0, height: 0}}>
+          <Image style={styles.markerImage} source={imageN_1} />
+          <Image style={styles.markerImage} source={imageN_2} />
+          <Image style={styles.markerImage} source={imageN_3} />
+          <Image style={styles.markerImage} source={imageNE_1} />
+          <Image style={styles.markerImage} source={imageNE_2} />
+          <Image style={styles.markerImage} source={imageNE_3} />
+          <Image style={styles.markerImage} source={imageNNE_1} />
+          <Image style={styles.markerImage} source={imageNNE_2} />
+          <Image style={styles.markerImage} source={imageNNE_3} />
+          <Image style={styles.markerImage} source={imageNW_1} />
+          <Image style={styles.markerImage} source={imageNW_2} />
+          <Image style={styles.markerImage} source={imageNW_3} />
+          <Image style={styles.markerImage} source={imageNNW_1} />
+          <Image style={styles.markerImage} source={imageNNW_2} />
+          <Image style={styles.markerImage} source={imageNNW_3} />
+          <Image style={styles.markerImage} source={imageS_1} />
+          <Image style={styles.markerImage} source={imageS_2} />
+          <Image style={styles.markerImage} source={imageS_3} />
+          <Image style={styles.markerImage} source={imageSE_1} />
+          <Image style={styles.markerImage} source={imageSE_2} />
+          <Image style={styles.markerImage} source={imageSE_3} />
+          <Image style={styles.markerImage} source={imageSSE_1} />
+          <Image style={styles.markerImage} source={imageSSE_2} />
+          <Image style={styles.markerImage} source={imageSSE_3} />
+          <Image style={styles.markerImage} source={imageSW_1} />
+          <Image style={styles.markerImage} source={imageSW_2} />
+          <Image style={styles.markerImage} source={imageSW_3} />
+          <Image style={styles.markerImage} source={imageSSW_1} />
+          <Image style={styles.markerImage} source={imageSSW_2} />
+          <Image style={styles.markerImage} source={imageSSW_3} />
+          <Image style={styles.markerImage} source={imageE_1} />
+          <Image style={styles.markerImage} source={imageE_2} />
+          <Image style={styles.markerImage} source={imageE_3} />
+          <Image style={styles.markerImage} source={imageENE_1} />
+          <Image style={styles.markerImage} source={imageENE_2} />
+          <Image style={styles.markerImage} source={imageENE_3} />
+          <Image style={styles.markerImage} source={imageESE_1} />
+          <Image style={styles.markerImage} source={imageESE_2} />
+          <Image style={styles.markerImage} source={imageESE_3} />
+          <Image style={styles.markerImage} source={imageW_1} />
+          <Image style={styles.markerImage} source={imageW_2} />
+          <Image style={styles.markerImage} source={imageW_3} />
+          <Image style={styles.markerImage} source={imageWSW_1} />
+          <Image style={styles.markerImage} source={imageWSW_2} />
+          <Image style={styles.markerImage} source={imageWSW_3} />
+          <Image style={styles.markerImage} source={imageWNW_1} />
+          <Image style={styles.markerImage} source={imageWNW_2} />
+          <Image style={styles.markerImage} source={imageWNW_3} />
+          <Image style={styles.markerImage} source={imageDB01} />
+          <Image style={styles.markerImage} source={imageDB01_N} />
+          <Image style={styles.markerImage} source={imageDB03} />
+          <Image style={styles.markerImage} source={imageDB03_N} />
+          <Image style={styles.markerImage} source={imageDB04} />
+          <Image style={styles.markerImage} source={imageDB05} />
+          <Image style={styles.markerImage} source={imageDB06} />
+          <Image style={styles.markerImage} source={imageDB08} />
+          <Image style={styles.markerImage} source={imageDB09} />
+          <Image style={styles.markerImage} source={imageDB11} />
+        </View>
       </View>
     );
   }
@@ -546,10 +558,11 @@ const styles = StyleSheet.create({
     padding: 2,
   },
   container: {
-    ...StyleSheet.absoluteFillObject,
     flex: 1,
-    backgroundColor: Colors.white,
-    flexDirection: 'column',
+    alignItems: 'center',
+  },
+  map: {
+    ...StyleSheet.absoluteFillObject,
   },
   markerWrap: {
     width: 80,
@@ -573,16 +586,10 @@ const styles = StyleSheet.create({
     height: 30,
     resizeMode:'cover' 
   },
-  indicatorContainer: {
-    flex: 2,
-    alignItems: 'center', 
-    justifyContent: 'center',
-  },
   timezoneContainer: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'flex-end',
-    padding: 10,
+    position: 'absolute',
+    bottom: 0,
+    margin: 10,
   },
   timezoneWrap: {
     flexDirection: 'row',
@@ -591,46 +598,6 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.white,
     borderBottomLeftRadius: 10,
     borderBottomRightRadius: 10,
-  },
-  padding10: {
-    paddingLeft: 10,
-    paddingRight: 10,
-  },
-  padding15: {
-    paddingLeft: 15,
-    paddingRight: 15,
-  },
-  padding20: {
-    paddingLeft: 20,
-    paddingRight: 20,
-  },
-  padding25: {
-    paddingLeft: 25,
-    paddingRight: 25,
-  },
-  padding30: {
-    paddingLeft: 30,
-    paddingRight: 30,
-  },
-  padding35: {
-    paddingLeft: 35,
-    paddingRight: 35,
-  },
-  padding40: {
-    paddingLeft: 40,
-    paddingRight: 40,
-  },
-  padding45: {
-    paddingLeft: 45,
-    paddingRight: 45,
-  },
-  padding50: {
-    paddingLeft: 50,
-    paddingRight: 50,
-  },
-  padding55: {
-    paddingLeft: 55,
-    paddingRight: 55,
   },
   timezone: {
     flex: 1,
@@ -645,24 +612,13 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: 'bold',
   },
-  sliderWrap: {
-    flexDirection: 'row',
-    height: 30,
-    opacity: 0.9,
-    backgroundColor: Colors.white,
-    alignItems: 'center',
-    justifyContent: 'flex-end',
-    borderTopLeftRadius: 10,
-    borderTopRightRadius: 10,
-  },
   slider: {
     flex: 1,
   },
   buttonContainer: {
-    flex: 1,
-    alignItems: 'flex-end',
-    justifyContent: 'flex-start',
-    padding: 10,
+    position: 'absolute',
+    right: 0,
+    margin: 10,
   },
   buttonWrap: {
     width: 63,
