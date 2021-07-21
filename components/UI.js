@@ -45,10 +45,10 @@ class Map extends Component {
 
   render() {
     return (
-      <View style={styles.flex}>
+      <View style={styles.container}>
         <MapView
           ref={el => (this.map = el)}
-          style={styles.flex}
+          style={styles.map}
           minZoomLevel={15}
           initialRegion={{
             ...this.state.curPos,
@@ -57,42 +57,15 @@ class Map extends Component {
           }}
         >
         </MapView>
-        <View style={styles.buttonContainerUpDown}>
-          <TouchableOpacity
-            style={[styles.button, styles.up]}
-            onPress={() => this.changePosition(0.0001, 0)}
-          >
-            <Text>+ Lat</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={[styles.button, styles.down]}
-            onPress={() => this.changePosition(-0.0001, 0)}
-          >
-            <Text>- Lat</Text>
-          </TouchableOpacity>
-        </View>
-        <View style={styles.buttonContainerLeftRight}>
-          <TouchableOpacity
-            style={[styles.button, styles.left]}
-            onPress={() => this.changePosition(0, -0.0001)}
-          >
-            <Text>- Lon</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={[styles.button, styles.right]}
-            onPress={() => this.changePosition(0, 0.0001)}
-          >
-            <Text>+ Lon</Text>
-          </TouchableOpacity>
-        </View>
-        <View style={styles.buttonContainerCenter}>
-          <TouchableOpacity
-            style={[styles.button, styles.center]}
-            onPress={() => this.changePosition(0, -0.0001)}
-          >
-            <Text>center</Text>
-          </TouchableOpacity>
-        </View>
+        <TouchableOpacity style={styles.timezone}>
+          <Text style={styles.text}>Time zone</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.buttonzone}>
+          <Text style={styles.text}>Button zone</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.loadingzone}>
+          <Text style={styles.text}>Loading zone</Text>
+        </TouchableOpacity>
       </View>
     );
   }
@@ -100,48 +73,27 @@ class Map extends Component {
 
 
 const styles = StyleSheet.create({
-  flex: {
+  container: {
     flex: 1,
-    width: '100%',
-  },
-  buttonContainerUpDown: {
-    ...StyleSheet.absoluteFillObject,
-    flexDirection: 'row',
-    justifyContent: 'center',
-  },
-  buttonContainerLeftRight: {
-    ...StyleSheet.absoluteFillObject,
-    flexDirection: 'column',
-    justifyContent: 'center',
-  },
-  buttonContainerCenter: {
-    ...StyleSheet.absoluteFillObject,
-    flexDirection: 'column',
-    justifyContent: 'center',
-  },
-  button: {
-    backgroundColor: 'rgba(100,100,100,0.2)',
-    position: 'absolute',
     alignItems: 'center',
-    justifyContent: 'center',
-    borderRadius: 20,
-    height: 50,
-    width: 50,
   },
-  up: {
-    alignSelf: 'flex-start',
+  map: {
+    ...StyleSheet.absoluteFillObject,
   },
-  down: {
-    alignSelf: 'flex-end',
+  timezone: {
+    position: 'absolute',
+    bottom: 0,
+    backgroundColor: 'rgba(255, 255, 255, 1)',
   },
-  left: {
-    alignSelf: 'flex-start',
+  buttonzone: {
+    position: 'absolute',
+    right: 0,
+    backgroundColor: 'rgba(255, 255, 255, 1)',
   },
-  right: {
-    alignSelf: 'flex-end',
-  },
-  center: {
-    alignSelf: 'center',
+  loadingzone: {
+    position: 'absolute',
+    top: 300,
+    backgroundColor: 'rgba(255, 255, 255, 1)',
   },
 });
 
