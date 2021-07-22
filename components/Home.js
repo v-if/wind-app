@@ -22,7 +22,7 @@ export default function Home({ navigation }) {
   }
   
   useEffect(() => {
-    // 2초 뒤에 api 호출
+    // 1.5초 뒤에 api 호출
     setTimeout(() => {
       let url = 'http://118.67.129.162/api/wind/road'
       fetch(url)
@@ -30,7 +30,7 @@ export default function Home({ navigation }) {
         .then((json) => dataProcessing(json.response))
         .catch((error) => console.error(error))
         .finally(() => setLoading(false));
-    }, 2000);
+    }, 1500);
   }, []);
 
   return (
