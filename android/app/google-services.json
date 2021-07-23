@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "908416404349",
+    "project_id": "wind-315100",
+    "storage_bucket": "wind-315100.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:908416404349:android:697550b8e48a42eae7da14",
+        "android_client_info": {
+          "package_name": "com.tkpark.wind"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "908416404349-nj6ittpjablu8ejgmbue03f03jhd6h6i.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAAK_obo78A4efABGFmhJthIH8ARll_Z0k"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "908416404349-nj6ittpjablu8ejgmbue03f03jhd6h6i.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
