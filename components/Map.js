@@ -270,6 +270,26 @@ RainMarker.propTypes = {
   info: PropTypes.object,
 };
 
+class HumidityMarker extends React.Component {
+
+  render() {
+    const { info } = this.props;
+
+    return (
+      <View style={styles.markerWrap}>
+        <View style={styles.markerWrapItem}>
+          <Text>습도</Text>
+          <Text>{info.reh}%</Text>
+        </View>
+      </View>
+    );
+  }
+}
+
+HumidityMarker.propTypes = {
+  info: PropTypes.object,
+};
+
 class WindCallout extends React.Component {
 
   render() {
@@ -365,12 +385,19 @@ class Map extends Component {
     this.setState({tp: 'rain'})
   }
 
+  onHumidityButtonPress = () => {
+    this.setState({tp: 'humidity'})
+  }
+
   onTempButtonPress = () => {
     this.setState({tp: 'temp'})
   }
 
   onRegionChangeComplete = (region) => {
     //console.log("onRegionChangeComplete.. lat:"+region.latitude+", lon:"+region.longitude)
+
+    let level = Math.log2(360 * (width / 256 / region.longitudeDelta)) + 1
+    console.log(`onRegionChangeComplete lat:${region.latitude}, lon:${region.longitude}, level:${level}`)
     this.apiWindData(region.latitude, region.longitude)
   }
 
@@ -413,7 +440,8 @@ class Map extends Component {
                   title={"lat:"+marker.latitude+", lon:"+marker.longitude}
                   description={"nx:"+marker.nx+", ny:"+marker.ny}
                 >
-                  {this.state.tp == 'wind' ? <WindMarker key={'wind_'+marker.id} info={marker} /> : <RainMarker key={'rain_'+marker.id} info={marker} /> }
+                  { this.state.tp == 'wind' ? <WindMarker key={'wind_'+marker.id} info={marker} /> : 
+                    this.state.tp == 'rain' ? <RainMarker key={'rain_'+marker.id} info={marker} />  : <HumidityMarker key={'humidity_'+marker.id} info={marker} /> }
                   <WindCallout key={'callout'+marker.id} info={marker} />
                 </Marker>
               })
@@ -436,6 +464,14 @@ class Map extends Component {
             >
               <View>
                 <Text style={this.state.tp == 'rain' ? styles.bubbleFontSeleted : styles.bubbleFont}>날씨</Text>
+              </View>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={this.state.tp == 'humidity' ? styles.bubbleSeleted : styles.bubble}
+              onPress={this.onHumidityButtonPress}
+            >
+              <View>
+                <Text style={this.state.tp == 'humidity' ? styles.bubbleFontSeleted : styles.bubbleFont}>습도</Text>
               </View>
             </TouchableOpacity>
           </View>
@@ -621,7 +657,7 @@ const styles = StyleSheet.create({
     margin: 10,
   },
   buttonWrap: {
-    width: 63,
+    width: 65,
   },
   bubble: {
     backgroundColor: Colors.clouds,
