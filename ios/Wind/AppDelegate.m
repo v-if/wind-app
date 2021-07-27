@@ -24,6 +24,9 @@ static void InitializeFlipper(UIApplication *application) {
 }
 #endif
 
+@import UIKit;
+@import Firebase;
+
 @implementation AppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
@@ -48,6 +51,9 @@ static void InitializeFlipper(UIApplication *application) {
   rootViewController.view = rootView;
   self.window.rootViewController = rootViewController;
   [self.window makeKeyAndVisible];
+  
+  // Use Firebase library to configure APIs
+  [FIRApp configure];
   
   [RNSplashScreen show]; // here
   

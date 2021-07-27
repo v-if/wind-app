@@ -5,7 +5,7 @@ import Colors from './Colors';
 function goToStore() {
   console.log('Go to AppStore:'+Platform.OS)
   if(Platform.OS === 'ios') {
-    Linking.openURL('itms-apps://itunes.apple.com/us/app/id1577293912?mt=8')
+    Linking.openURL('itms-apps://itunes.apple.com/us/app/id1577293912')
   } else if(Platform.OS === 'android') {
     Linking.openURL("market://details?id=com.tkpark.wind");
   }
