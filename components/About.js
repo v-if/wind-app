@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Image, Text, View, StyleSheet, Dimensions, SafeAreaView, ScrollView  } from 'react-native';
+import { Image, Text, View, StyleSheet, Dimensions } from 'react-native';
 import Colors from './Colors';
 import packageJson from './../package.json';
 

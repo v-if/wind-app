@@ -344,24 +344,26 @@ class Map extends Component {
 
     let data = _.orderBy(merge, ['timezone'], ['asc'])
     //console.log(data)
+    if(data.length == 0) {
+      data = []
+    }
 
-    if(data.length > 0) {
-      if(this.state.time == '') {
-        this.setState({data: data, time: data['0'].timezone, isLoading: false})
-      } else {
-        this.setState({data: data, isLoading: false})
-      }
+    if(this.state.time == '') {
+      this.setState({data: data, time: data['0'].timezone, isLoading: false})
+    } else {
+      this.setState({data: data, isLoading: false})
     }
   }
 
-  apiWindData(latitude, longitude) {
+  apiWindData(latitude, longitude, level) {
     //this.setState({isLoading: true})
     // api/wind/data/
     //let url = 'http://10.190.10.77:5000/api/wind/data/'+latitude+'/'+longitude // local
     //let url = 'http://118.67.129.162/api/wind/data/'+latitude+'/'+longitude // dev    
 
     // api/wind/forecast
-    let url = 'http://118.67.129.162/api/wind/forecast/'+latitude+'/'+longitude // dev    
+    //let url = 'http://10.190.10.77:5000/api/wind/forecast/'+latitude+'/'+longitude+'/'+level // local
+    let url = 'http://118.67.129.162/api/wind/forecast/'+latitude+'/'+longitude+'/'+level // dev    
     fetch(url)
       .then((response) => response.json())
       .then((json) => this.dataProcessing(json.response))
@@ -389,16 +391,11 @@ class Map extends Component {
     this.setState({tp: 'humidity'})
   }
 
-  onTempButtonPress = () => {
-    this.setState({tp: 'temp'})
-  }
-
   onRegionChangeComplete = (region) => {
     //console.log("onRegionChangeComplete.. lat:"+region.latitude+", lon:"+region.longitude)
-
-    let level = Math.log2(360 * (width / 256 / region.longitudeDelta)) + 1
+    let level = parseInt(Math.log2(360 * (width / 256 / region.longitudeDelta)) + 1)
     console.log(`onRegionChangeComplete lat:${region.latitude}, lon:${region.longitude}, level:${level}`)
-    this.apiWindData(region.latitude, region.longitude)
+    this.apiWindData(region.latitude, region.longitude, level)
   }
 
   componentDidMount() {

@@ -91,8 +91,8 @@ export default function Home({ navigation }) {
     </View>
     <View style={styles.admob}>
       <BannerAd
-        unitId={TestIds.BANNER}
-        size={BannerAdSize.FULL_BANNER}
+        unitId={'ca-app-pub-8932745447223637/3208931044'}
+        size={BannerAdSize.SMART_BANNER}
         requestOptions={{
           requestNonPersonalizedAdsOnly: true,
         }}
