@@ -3,13 +3,18 @@ import { TouchableOpacity, Text, View, Image, StyleSheet, Platform, Dimensions }
 import Colors from './Colors';
 import { FlatGrid } from 'react-native-super-grid';
 import { WebView } from 'react-native-webview';
-import { BannerAd, BannerAdSize, TestIds } from '@react-native-firebase/admob';
+import { BannerAd, BannerAdSize } from '@react-native-firebase/admob';
 
 export default function Home({ navigation }) {
   const [isLoading, setLoading] = useState(true);
   const [data, setData] = useState([]);
   const [width, setWidth] = useState(10);
   const [height, setHeight] = useState(10);
+
+  const unitId =
+    Platform.OS === 'ios'
+      ? 'ca-app-pub-8932745447223637/4899865781'
+      : 'ca-app-pub-8932745447223637/3208931044';
 
   const win = Dimensions.get('window');
 
@@ -91,7 +96,7 @@ export default function Home({ navigation }) {
     </View>
     <View style={styles.admob}>
       <BannerAd
-        unitId={'ca-app-pub-8932745447223637/3208931044'}
+        unitId={unitId}
         size={BannerAdSize.SMART_BANNER}
         requestOptions={{
           requestNonPersonalizedAdsOnly: true,

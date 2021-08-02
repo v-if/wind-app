@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Image, Text, View, StyleSheet, Dimensions, SafeAreaView, ScrollView } from 'react-native';
+import { Image, StyleSheet, Dimensions, SafeAreaView, ScrollView } from 'react-native';
 import Colors from './Colors';
 
 export default function IconInformation({ navigation }) {
@@ -13,6 +13,9 @@ export default function IconInformation({ navigation }) {
   // image 2(905 x 1280)
   const ratio2 = win.width/905; //905 is actual image width
 
+  // image 3(905 x 1280)
+  const ratio3 = win.width/905; //905 is actual image width
+
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView>
@@ -25,6 +28,11 @@ export default function IconInformation({ navigation }) {
           style={{ width:win.width, height:1280*ratio2 }}
           resizeMode='contain'
           source={require('./images/info_weather.jpg')}
+        />
+        <Image
+          style={{ width:win.width, height:1280*ratio3 }}
+          resizeMode='contain'
+          source={require('./images/info_hu.jpg')}
         />
       </ScrollView>
     </SafeAreaView >

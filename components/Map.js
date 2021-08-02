@@ -69,6 +69,11 @@ import imageDB08 from './images/DB08.jpg';
 import imageDB09 from './images/DB09.jpg';
 import imageDB11 from './images/DB11.jpg';
 
+import imageHU_1 from './images/HU_1.jpg';
+import imageHU_2 from './images/HU_2.jpg';
+import imageHU_3 from './images/HU_3.jpg';
+import imageHU_4 from './images/HU_4.jpg';
+
 const _ = require('lodash')
 
 const { width, height } = Dimensions.get('window');
@@ -275,10 +280,26 @@ class HumidityMarker extends React.Component {
   render() {
     const { info } = this.props;
 
+    let image
+    let numReh = parseInt(info.reh)
+    if(numReh <= 25) {
+      image = imageHU_1
+    } else if(numReh <= 50) {
+      image = imageHU_2
+    } else if(numReh <= 75) {
+      image = imageHU_3
+    } else {
+      image = imageHU_4
+    }
+
     return (
       <View style={styles.markerWrap}>
         <View style={styles.markerWrapItem}>
           <Text>습도</Text>
+          <Image 
+            style={styles.markerImage}
+            source={image}
+          />
           <Text>{info.reh}%</Text>
         </View>
       </View>
@@ -394,7 +415,7 @@ class Map extends Component {
   onRegionChangeComplete = (region) => {
     //console.log("onRegionChangeComplete.. lat:"+region.latitude+", lon:"+region.longitude)
     let level = parseInt(Math.log2(360 * (width / 256 / region.longitudeDelta)) + 1)
-    console.log(`onRegionChangeComplete lat:${region.latitude}, lon:${region.longitude}, level:${level}`)
+    //console.log(`onRegionChangeComplete lat:${region.latitude}, lon:${region.longitude}, level:${level}`)
     this.apiWindData(region.latitude, region.longitude, level)
   }
 
@@ -516,65 +537,89 @@ class Map extends Component {
             })}
           </View>
         </View>
-        <View style={{width: 0, height: 0}}>
-          <Image style={styles.markerImage} source={imageN_1} />
-          <Image style={styles.markerImage} source={imageN_2} />
-          <Image style={styles.markerImage} source={imageN_3} />
-          <Image style={styles.markerImage} source={imageNE_1} />
-          <Image style={styles.markerImage} source={imageNE_2} />
-          <Image style={styles.markerImage} source={imageNE_3} />
-          <Image style={styles.markerImage} source={imageNNE_1} />
-          <Image style={styles.markerImage} source={imageNNE_2} />
-          <Image style={styles.markerImage} source={imageNNE_3} />
-          <Image style={styles.markerImage} source={imageNW_1} />
-          <Image style={styles.markerImage} source={imageNW_2} />
-          <Image style={styles.markerImage} source={imageNW_3} />
-          <Image style={styles.markerImage} source={imageNNW_1} />
-          <Image style={styles.markerImage} source={imageNNW_2} />
-          <Image style={styles.markerImage} source={imageNNW_3} />
-          <Image style={styles.markerImage} source={imageS_1} />
-          <Image style={styles.markerImage} source={imageS_2} />
-          <Image style={styles.markerImage} source={imageS_3} />
-          <Image style={styles.markerImage} source={imageSE_1} />
-          <Image style={styles.markerImage} source={imageSE_2} />
-          <Image style={styles.markerImage} source={imageSE_3} />
-          <Image style={styles.markerImage} source={imageSSE_1} />
-          <Image style={styles.markerImage} source={imageSSE_2} />
-          <Image style={styles.markerImage} source={imageSSE_3} />
-          <Image style={styles.markerImage} source={imageSW_1} />
-          <Image style={styles.markerImage} source={imageSW_2} />
-          <Image style={styles.markerImage} source={imageSW_3} />
-          <Image style={styles.markerImage} source={imageSSW_1} />
-          <Image style={styles.markerImage} source={imageSSW_2} />
-          <Image style={styles.markerImage} source={imageSSW_3} />
-          <Image style={styles.markerImage} source={imageE_1} />
-          <Image style={styles.markerImage} source={imageE_2} />
-          <Image style={styles.markerImage} source={imageE_3} />
-          <Image style={styles.markerImage} source={imageENE_1} />
-          <Image style={styles.markerImage} source={imageENE_2} />
-          <Image style={styles.markerImage} source={imageENE_3} />
-          <Image style={styles.markerImage} source={imageESE_1} />
-          <Image style={styles.markerImage} source={imageESE_2} />
-          <Image style={styles.markerImage} source={imageESE_3} />
-          <Image style={styles.markerImage} source={imageW_1} />
-          <Image style={styles.markerImage} source={imageW_2} />
-          <Image style={styles.markerImage} source={imageW_3} />
-          <Image style={styles.markerImage} source={imageWSW_1} />
-          <Image style={styles.markerImage} source={imageWSW_2} />
-          <Image style={styles.markerImage} source={imageWSW_3} />
-          <Image style={styles.markerImage} source={imageWNW_1} />
-          <Image style={styles.markerImage} source={imageWNW_2} />
-          <Image style={styles.markerImage} source={imageWNW_3} />
-          <Image style={styles.markerImage} source={imageDB01} />
-          <Image style={styles.markerImage} source={imageDB01_N} />
-          <Image style={styles.markerImage} source={imageDB03} />
-          <Image style={styles.markerImage} source={imageDB03_N} />
-          <Image style={styles.markerImage} source={imageDB04} />
-          <Image style={styles.markerImage} source={imageDB05} />
-          <Image style={styles.markerImage} source={imageDB06} />
-          <Image style={styles.markerImage} source={imageDB08} />
-          <Image style={styles.markerImage} source={imageDB09} />
-          <Image style={styles.markerImage} source={imageDB11} />
+        <View style={{ position: 'absolute', top: -1000, flexDirection: 'column' }}>
+          <View style={{ flexDirection: 'row' }}>
+            <Image style={styles.markerImage} source={imageN_1} />
+            <Image style={styles.markerImage} source={imageN_2} />
+            <Image style={styles.markerImage} source={imageN_3} />
+            <Image style={styles.markerImage} source={imageNE_1} />
+            <Image style={styles.markerImage} source={imageNE_2} />
+
+            <Image style={styles.markerImage} source={imageNE_3} />
+            <Image style={styles.markerImage} source={imageNNE_1} />
+            <Image style={styles.markerImage} source={imageNNE_2} />
+            <Image style={styles.markerImage} source={imageNNE_3} />
+            <Image style={styles.markerImage} source={imageNW_1} />
+          </View>
+          <View style={{ flexDirection: 'row' }}>
+            <Image style={styles.markerImage} source={imageNW_2} />
+            <Image style={styles.markerImage} source={imageNW_3} />
+            <Image style={styles.markerImage} source={imageNNW_1} />
+            <Image style={styles.markerImage} source={imageNNW_2} />
+            <Image style={styles.markerImage} source={imageNNW_3} />
+          
+            <Image style={styles.markerImage} source={imageS_1} />
+            <Image style={styles.markerImage} source={imageS_2} />
+            <Image style={styles.markerImage} source={imageS_3} />
+            <Image style={styles.markerImage} source={imageSE_1} />
+            <Image style={styles.markerImage} source={imageSE_2} />
+          </View>
+          <View style={{ flexDirection: 'row' }}>
+            <Image style={styles.markerImage} source={imageSE_3} />
+            <Image style={styles.markerImage} source={imageSSE_1} />
+            <Image style={styles.markerImage} source={imageSSE_2} />
+            <Image style={styles.markerImage} source={imageSSE_3} />
+            <Image style={styles.markerImage} source={imageSW_1} />
+
+            <Image style={styles.markerImage} source={imageSW_2} />
+            <Image style={styles.markerImage} source={imageSW_3} />
+            <Image style={styles.markerImage} source={imageSSW_1} />
+            <Image style={styles.markerImage} source={imageSSW_2} />
+            <Image style={styles.markerImage} source={imageSSW_3} />
+          </View>
+          <View style={{ flexDirection: 'row' }}>
+            <Image style={styles.markerImage} source={imageE_1} />
+            <Image style={styles.markerImage} source={imageE_2} />
+            <Image style={styles.markerImage} source={imageE_3} />
+            <Image style={styles.markerImage} source={imageENE_1} />
+            <Image style={styles.markerImage} source={imageENE_2} />
+
+            <Image style={styles.markerImage} source={imageENE_3} />
+            <Image style={styles.markerImage} source={imageESE_1} />
+            <Image style={styles.markerImage} source={imageESE_2} />
+            <Image style={styles.markerImage} source={imageESE_3} />
+            <Image style={styles.markerImage} source={imageW_1} />
+          </View>
+          <View style={{ flexDirection: 'row' }}>
+            <Image style={styles.markerImage} source={imageW_2} />
+            <Image style={styles.markerImage} source={imageW_3} />
+            <Image style={styles.markerImage} source={imageWSW_1} />
+            <Image style={styles.markerImage} source={imageWSW_2} />
+            <Image style={styles.markerImage} source={imageWSW_3} />
+          
+            <Image style={styles.markerImage} source={imageWNW_1} />
+            <Image style={styles.markerImage} source={imageWNW_2} />
+            <Image style={styles.markerImage} source={imageWNW_3} />
+            <Image style={styles.markerImage} source={imageDB01} />
+            <Image style={styles.markerImage} source={imageDB01_N} />
+          </View>
+          <View style={{ flexDirection: 'row' }}>
+            <Image style={styles.markerImage} source={imageDB03} />
+            <Image style={styles.markerImage} source={imageDB03_N} />
+            <Image style={styles.markerImage} source={imageDB04} />
+            <Image style={styles.markerImage} source={imageDB05} />
+            <Image style={styles.markerImage} source={imageDB06} />
+
+            <Image style={styles.markerImage} source={imageDB08} />
+            <Image style={styles.markerImage} source={imageDB09} />
+            <Image style={styles.markerImage} source={imageDB11} />
+            <Image style={styles.markerImage} source={imageHU_1} />
+            <Image style={styles.markerImage} source={imageHU_2} />
+          </View>
+          <View style={{ flexDirection: 'row' }}>
+            <Image style={styles.markerImage} source={imageHU_3} />
+            <Image style={styles.markerImage} source={imageHU_4} />
+          </View>
         </View>
       </View>
     );
@@ -614,7 +659,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   markerImage: {
-    flex: 1, 
     width: 30, 
     height: 30,
     resizeMode:'cover' 
