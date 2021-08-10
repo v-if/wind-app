@@ -93,7 +93,7 @@ const MapView = ({ coords }) => {
         },
         pitch: 0,
         heading: 0,
-        altitude: 1000,
+        altitude: 15000,
         zoom: 14,
       });
     }
