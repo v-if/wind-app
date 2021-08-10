@@ -8,7 +8,7 @@ export default function Library({ navigation }) {
     <View style={styles.container}>
       <View style={styles.group}>
         <Text style={styles.title}>Open Data</Text>
-        <Text style={styles.desc}>- 기상청 동네예보 초단기예보조회</Text>
+        <Text style={styles.desc}>- 기상청 단기예보 초단기예보조회</Text>
       </View>
       <View style={styles.group}>
         <Text style={styles.title}>Open Source</Text>

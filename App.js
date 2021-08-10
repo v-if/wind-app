@@ -12,6 +12,7 @@ import {
   Feedback,
   Library,
   Map,
+  MapALL,
   IconInformation,
 } from './components';
 
@@ -55,7 +56,7 @@ export default function App() {
         routeNameRef.current = currentRouteName;
       }}
     >
-      <Stack.Navigator initialRouteName="Home">
+      <Stack.Navigator initialRouteName="MapALL">
         <Stack.Screen 
           name="Home" 
           component={Home} 
@@ -109,6 +110,49 @@ export default function App() {
             headerTitleStyle: {
               fontWeight: 'bold',
             },
+          })}
+        />
+        <Stack.Screen 
+          name="MapALL" 
+          component={MapALL}
+          options={({ navigation, route }) => ({
+            title: '',
+            headerStyle: styles.header,
+            headerTintColor: Colors.black,
+            headerTitleStyle: {
+              fontWeight: 'bold',
+            },
+            headerLeft: () => (
+              <View style={{
+                flexDirection: "row",
+                alignItems: 'center',
+                justifyContent: "flex-end",
+                marginLeft: 10,
+                }}
+              >
+                <Image
+                  style={{width: 135, height: 34}}
+                  source={require('./components/images/home.jpg')}
+                />
+              </View>
+            ),
+            headerRight: () => (
+              <View style={{
+                flexDirection: "row",
+                justifyContent: "flex-end",
+                marginRight: 10,
+                }}
+              >
+                <TouchableOpacity
+                  onPress={() => navigation.navigate('Setting')}
+                  >
+                  <Image
+                    style={{width: 40, height: 40}}
+                    source={require('./components/images/crankset.png')}
+                  />
+                </TouchableOpacity>
+              </View>
+            ),
           })}
         />
         <Stack.Screen 
