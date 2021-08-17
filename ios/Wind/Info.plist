@@ -35,8 +35,12 @@
 			</dict>
 		</dict>
 	</dict>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>위치 기반 서비스를 사용하려면 위치 정보 접근 권한이 필요합니다. 순풍순풍 앱에게 위치 정보를 승인하면 사용자 주변의 바람, 날씨 정보를 확인할 수 있습니다.</string>
+	<key>NSLocationAlwaysUsageDescription</key>
+	<string>위치 기반 서비스를 사용하려면 위치 정보 접근 권한이 필요합니다. 순풍순풍 앱에게 위치 정보를 승인하면 사용자 주변의 바람, 날씨 정보를 확인할 수 있습니다.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string></string>
+	<string>위치 기반 서비스를 사용하려면 위치 정보 접근 권한이 필요합니다. 순풍순풍 앱에게 위치 정보를 승인하면 사용자 주변의 바람, 날씨 정보를 확인할 수 있습니다.</string>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIRequiredDeviceCapabilities</key>
